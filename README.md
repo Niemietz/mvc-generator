@@ -2,7 +2,7 @@
 
 > THIS IS A WORK IN PROGRESS
 
-It creates the base of your project using MVC design pattern, it may help you to develop your own MVC Framework or even to develop basic websites.
+It creates a base for your project using MVC design pattern. It may help you to develop your own MVC Framework or even to develop basic websites.
 
 ---
 
