@@ -59,3 +59,9 @@ typings/
 
 # next.js build output
 .next
+
+# custom
+public/stylesheets/all.css
+public/stylesheets/all.min.css
+public/webfonts
+.vscode

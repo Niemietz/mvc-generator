@@ -1,0 +1,98 @@
+.languages
+{
+    padding: 15px;
+}
+
+.language
+{
+    cursor: pointer;
+    height:50px;
+    width:50px;
+    line-height: 4;
+    text-align: center;
+    display:inline-block;
+    margin-right: 25px;
+}
+
+.language span
+{
+    top: -40px;
+    position: relative;
+}
+
+.language i
+{
+    cursor: pointer;
+    font-size: 2em;
+    /* First we need to help some browsers along for this to work.
+        Just because a vendor prefix is there, doesn't mean it will
+        work in a browser made by that vendor either, it's just for
+        future-proofing purposes I guess. */
+    -o-transition: .5s;
+    -ms-transition: .5s;
+    -moz-transition: .5s;
+    -webkit-transition: .5s;
+    /* ...and now for the proper property */
+    transition: .5s;
+}
+
+.language i:hover
+{
+    font-size: 2.7em;
+}
+
+.language[checked="true"] i
+{
+    font-size: 2.7em;
+    color: darksalmon;
+}
+
+.language[checked="checked"] i
+{
+    font-size: 2.7em;
+    color: darksalmon;
+}
+
+.language[checked] i
+{
+    font-size: 2.7em;
+    color: darksalmon;
+}
+
+.language[checked="true"] span
+{
+    font-weight: bold;
+    color: darksalmon;
+}
+
+.language[checked="checked"] span
+{
+    font-weight: bold;
+    color: darksalmon;
+    /* First we need to help some browsers along for this to work.
+        Just because a vendor prefix is there, doesn't mean it will
+        work in a browser made by that vendor either, it's just for
+        future-proofing purposes I guess. */
+    -o-transition: .5s;
+    -ms-transition: .5s;
+    -moz-transition: .5s;
+    -webkit-transition: .5s;
+    /* ...and now for the proper property */
+    transition: .5s;
+}
+
+.language[checked] span
+{
+    font-weight: bold;
+    color: darksalmon;
+    /* First we need to help some browsers along for this to work.
+        Just because a vendor prefix is there, doesn't mean it will
+        work in a browser made by that vendor either, it's just for
+        future-proofing purposes I guess. */
+    -o-transition: .5s;
+    -ms-transition: .5s;
+    -moz-transition: .5s;
+    -webkit-transition: .5s;
+    /* ...and now for the proper property */
+    transition: .5s;
+}
