@@ -1,4 +1,4 @@
-import removePageFromModelId from '/javascripts/tabs/page-adder.js';
+import { removePageFromModelId, changePageFromModelChange } from '/javascripts/tabs/page-adder.js';
 
 const mdlAddModelModalId = "add-model-modal";
 const btnAddModelId = "add-model";
@@ -185,6 +185,12 @@ $(document).ready(function()
         }
     }
 
+    $(`#${mdlAddModelModalId}`).on('shown.bs.modal', function(e) {
+        if (currentEditModel != null) {
+            fillAddModelModal(currentEditModel)
+        }
+    })
+
     $(`#${mdlAddModelModalId}`).on('hidden.bs.modal', function (e) {
         resetAddModelModal()
 
@@ -255,34 +261,34 @@ $(document).ready(function()
 
             currentEditModel.delete = newModelData[inpAddModelDelete]
 
-            const index = models.indexOf(currentEditModel)
-
-            const tableLine = $($(`#${tblModelsBodyTableId}`).children()[index])
-            $(tableLine.children()[1]).text(currentEditModel.name)
-            const selectCheck = $(tableLine.children()[2]).find(".select")
+            const tableLine = document.getElementById(currentEditModel.id)
+            tableLine.childNodes[1].innerHTML = currentEditModel.name
+            const selectCheck = tableLine.childNodes[2].querySelector(".select")
             if (currentEditModel.select) {
-                selectCheck.attr("checked", true)
+                selectCheck.setAttribute("checked", true)
             } else {
-                selectCheck.removeAttr("checked")
+                selectCheck.removeAttribute("checked")
             }
-            const updateCheck = $(tableLine.children()[2]).find(".update")
+            const updateCheck = tableLine.childNodes[2].querySelector(".update")
             if (currentEditModel.update) {
-                updateCheck.attr("checked", true)
+                updateCheck.setAttribute("checked", true)
             } else {
-                updateCheck.removeAttr("checked")
+                updateCheck.removeAttribute("checked")
             }
-            const insertCheck = $(tableLine.children()[2]).find(".insert")
+            const insertCheck = tableLine.childNodes[2].querySelector(".insert")
             if (currentEditModel.insert) {
-                insertCheck.attr("checked", true)
+                insertCheck.setAttribute("checked", true)
             } else {
-                insertCheck.removeAttr("checked")
+                insertCheck.removeAttribute("checked")
             }
-            const deleteCheck = $(tableLine.children()[2]).find(".delete")
+            const deleteCheck = tableLine.childNodes[2].querySelector(".delete")
             if (currentEditModel.delete) {
-                deleteCheck.attr("checked", true)
+                deleteCheck.setAttribute("checked", true)
             } else {
-                deleteCheck.removeAttr("checked")
+                deleteCheck.removeAttribute("checked")
             }
+
+            changePageFromModelChange(currentEditModel.id, currentEditModel.name)
         } else {
             let newModel = {}
 
@@ -427,8 +433,6 @@ $(document).ready(function()
             newModelEditButton.innerHTML = "Editar";
 
             newModelEditButton.onclick = () => {
-                fillAddModelModal(newModel)
-
                 currentEditModel = newModel
 
                 $(`#${mdlAddModelModalId}`).modal('show');
@@ -439,6 +443,7 @@ $(document).ready(function()
             newModelCol3.append(newModelEditButton)
 
             const newModelLine = document.createElement("tr");
+            newModelLine.setAttribute("id", newModel.id)
             newModelLine.append(newModelLineHead)
             newModelLine.append(newModelCol1)
             newModelLine.append(newModelCol2)

@@ -32,8 +32,7 @@ function fillAddPageModal(data) {
 
     if (listWithItemIds.includes(typeCheckbox.id)) {
         if (data["item"]["id"] != null) {
-            console.log(data["item"]["id"])
-            document.getElementById(data["item"]["id"]).click()
+            document.querySelector(`input[id="${data["item"]["id"]}"]`).click()
         }
     }
 
@@ -131,10 +130,24 @@ $(document).ready(function()
         if (currentEditPage != null) {
             currentEditPage.name = newPageData[inpAddPageNameId]
 
-            const index = pages.indexOf(currentEditPage)
+            currentEditPage.type = parseInt(document.querySelector(`input[name="${rdPageTypeName}"]:checked`).value)
 
-            const tableLine = $($(`#${tblPagesBodyTableId}`).children()[index])
-            $(tableLine.children()[1]).text(currentEditPage.name)
+            const tableLine = document.getElementById(currentEditPage.id)
+            const type = document.querySelector(`input[name="${rdPageTypeName}"]:checked`).parentNode
+            .querySelector("label").innerHTML
+            currentEditPage.typeText = type
+
+            if (listWithItemIds.includes(document.querySelector(`input[name="${rdPageTypeName}"]:checked`).id)) {
+                const checkedPageModel = document.querySelector(`input[name="${rdPageModelName}"]:checked`)
+                const item = checkedPageModel.parentNode.querySelector("label").innerHTML
+                tableLine.childNodes[2].innerHTML = `${type} (${item})`
+                currentEditPage.item = { "model": item, "id": checkedPageModel.id }
+            } else {
+                tableLine.childNodes[2].innerHTML = `${type}`
+                currentEditPage.item = { "model": null, "id": null }
+            }
+
+            tableLine.childNodes[1].innerHTML = currentEditPage.name
         } else {
             let newPage = {}
 
@@ -162,6 +175,8 @@ $(document).ready(function()
                 newPage.item = { "model": null, "id": null }
             }
 
+            newPage.typeText = document.querySelector(`input[name="${rdPageTypeName}"]:checked`).parentNode
+                .querySelector("label").innerHTML
             newPage.type = parseInt(document.querySelector(`input[name="${rdPageTypeName}"]:checked`).value)
 
             const newPageRemoveButton = document.createElement("button");
@@ -216,19 +231,38 @@ $(document).ready(function()
     });
 });
 
-export default function(modelId) {
+export function removePageFromModelId(modelId) {
     const pagesTableBody = document.getElementById(tblPagesBodyTableId)
 
-    let page = pages.find(page => page.item.id == modelId);
-    const pageToRemoveIndex = pages.indexOf(page)
-    pages.splice(pageToRemoveIndex, 1)
-    if (pages.length == 0) {
-        showNoPageWarning(true);
-    }
-
-    pagesTableBody.childNodes.forEach((tr) => {
-        if (tr.id == page.id) {
-            tr.remove()
+    const page = pages.find(page => page.item.id == modelId);
+    if (page != null) {
+        const pageToRemoveIndex = pages.indexOf(page)
+        pages.splice(pageToRemoveIndex, 1)
+        if (pages.length == 0) {
+            showNoPageWarning(true);
         }
-    })
+
+        pagesTableBody.childNodes.forEach((tr) => {
+            if (tr.id == page.id) {
+                tr.remove()
+            }
+        })
+    }
 }
+
+export function changePageFromModelChange(modelId, modelName) {
+    const pagesTableBody = document.getElementById(tblPagesBodyTableId)
+
+    const page = pages.find(page => page.item.id == modelId);
+    if (page != null) {
+        page.item.model = modelName
+    
+        pagesTableBody.childNodes.forEach((tr) => {
+            if (tr.id == page.id) {
+                tr.childNodes[2].innerHTML = `${page.typeText} (${modelName})`
+            }
+        })
+    }
+}
+
+export default { removePageFromModelId, changePageFromModelChange }
