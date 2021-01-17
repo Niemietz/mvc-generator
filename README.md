@@ -1,2 +1,2 @@
 # MVC Generator
-Creates the basis of your any project using MVC development pattern.
+It creates the base of your project using MVC design pattern, it may help you to develop your own MVC Framework or even to develop basic websites.
