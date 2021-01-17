@@ -12,6 +12,7 @@ const divNoModelId = "no-model-warning";
 const inpAddModelName = "name";
 const inpAddModelAttribute = "attribute";
 const inpAddModelColumnName = "column-name";
+const selAttributeTypeName = "attribute-type";
 const inpAddModelSelect = "select";
 const inpAddModelUpdate = "update";
 const inpAddModelInsert = "insert";
@@ -20,7 +21,7 @@ const inpAddModelDelete = "delete";
 const models = []
 let currentEditModel = null
 
-function addNewModelAttributeLine(attribute, columnName) {
+function addNewModelAttributeLine(attribute, columnName, type) {
     const newModelAttributeInput = document.createElement("input");
     newModelAttributeInput.setAttribute("name", inpAddModelAttribute);
     newModelAttributeInput.setAttribute("type", "text");
@@ -45,6 +46,36 @@ function addNewModelAttributeLine(attribute, columnName) {
     const newModelColumnNameColumn = document.createElement("td");
     newModelColumnNameColumn.append(newModelColumnNameInput)
 
+    const attributeTypes = [
+        "Integer",
+        "String",
+        "Boolean",
+        "Float",
+        "Double",
+        "Char"
+    ]
+
+    const newModelAttributeTypeSelect = document.createElement("select");
+    newModelAttributeTypeSelect.setAttribute("name", selAttributeTypeName);
+    newModelAttributeTypeSelect.classList.add("form-select");
+
+    attributeTypes.forEach((attributeType, index) => {
+        const newModelAttributeType = document.createElement("option");
+        newModelAttributeType.setAttribute("value", attributeType);
+        newModelAttributeType.innerHTML = attributeType
+
+        if (type != null && type.length > 0 && type == attributeType) {
+            newModelAttributeType.selected = true
+        } else if (type == null && index == 0) {
+            newModelAttributeType.selected = true
+        }
+
+        newModelAttributeTypeSelect.append(newModelAttributeType)
+    })
+    
+    const newModelAttributeTypeColumn = document.createElement("td");
+    newModelAttributeTypeColumn.append(newModelAttributeTypeSelect)
+
     const newModelRemoveButtonIcon = document.createElement("i");
     newModelRemoveButtonIcon.classList.add("fas");
     newModelRemoveButtonIcon.classList.add("fa-lg");
@@ -62,6 +93,7 @@ function addNewModelAttributeLine(attribute, columnName) {
     const newModelAttributeLine = document.createElement("tr");
     newModelAttributeLine.append(newModelAttributeColumn)
     newModelAttributeLine.append(newModelColumnNameColumn)
+    newModelAttributeLine.append(newModelAttributeTypeColumn)
     newModelAttributeLine.append(newModelRemoveColumn)
 
     const modelTableBody = document.getElementById(tblModelBodyTableId)
@@ -80,8 +112,9 @@ function fillAddModelModal(data) {
     for (let i = 0; i < data["attributesAndColumnNames"].length; i++) {
         const attribute = data["attributesAndColumnNames"][i]["attribute"]
         const columnName = data["attributesAndColumnNames"][i]["columnName"]
+        const type = data["attributesAndColumnNames"][i]["type"]
 
-        addNewModelAttributeLine(attribute, columnName)
+        addNewModelAttributeLine(attribute, columnName, type)
     }
 
     if (data["select"]) {
@@ -218,6 +251,12 @@ $(document).ready(function()
                 ]
         }
 
+        if (!Array.isArray(newModelData[selAttributeTypeName])) {
+                newModelData[selAttributeTypeName] = [
+                    newModelData[selAttributeTypeName]
+                ]
+        }
+
         if (newModelData[inpAddModelSelect] == "1") {
             newModelData[inpAddModelSelect] = true
         } else {
@@ -249,7 +288,8 @@ $(document).ready(function()
             for(let i = 0; i < newModelData[inpAddModelAttribute].length; i++) {
                 currentEditModel.attributesAndColumnNames.push({
                     "attribute": newModelData[inpAddModelAttribute][i],
-                    "columnName": newModelData[inpAddModelColumnName][i]
+                    "columnName": newModelData[inpAddModelColumnName][i],
+                    "type": newModelData[selAttributeTypeName][i]
                 })
             }
 
@@ -306,7 +346,8 @@ $(document).ready(function()
             for(let i = 0; i < newModelData[inpAddModelAttribute].length; i ++) {
                 newModel.attributesAndColumnNames.push({
                     "attribute": newModelData[inpAddModelAttribute][i],
-                    "columnName": newModelData[inpAddModelColumnName][i]
+                    "columnName": newModelData[inpAddModelColumnName][i],
+                    "type": newModelData[selAttributeTypeName][i]
                 })
             }
 

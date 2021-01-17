@@ -1,5 +1,5 @@
 <div class="modal fade" id="add-model-modal" tabindex="-1" role="dialog" aria-labelledby="add-model-title" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title text-dark" id="add-model-title">Adicionar Model</h5>
@@ -8,6 +8,9 @@
                 </button>
             </div>
             <div class="modal-body">
+                <span><b>Obs.:</b> Este software <u>ainda</u> não possui a funcionalidade de gerar atributos do tipo de outros Models ou do tipo de Array / Listas</span>
+                <br />
+                <br />
                 <form id="add-model-form">
                     <input name="name" class="form-control" type="text" placeholder="Nome">
                     <table class="table table-striped text-dark">
@@ -15,6 +18,7 @@
                             <tr>
                                 <th scope="col">Atributo</th>
                                 <th scope="col">Nome da coluna</th>
+                                <th scope="col">Tipo</th>
                                 <th scope="col" class="text-right">
                                     <a id="add-attribute" class="btn btn-rounded btn-light">
                                         <i class="fas fa-lg fa-plus "></i>

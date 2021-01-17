@@ -12,13 +12,25 @@ const inpAddPageNameId = "name";
 const rdPageModelName = "page-model";
 const inpAddPageModelsTableId = "page-models-table";
 const rdPageDefaultId = "default";
+const rdPageInsertFormId = "insert-form";
+const rdPageInsertEditFormId = "insert-edit-form";
+const rdPageListWithInsertId = "list-with-insert";
 const rdPageListWithEditId = "list-with-edit";
 const rdPageListWithRemoveId = "list-with-remove";
+const rdPageListWithInsertEditId = "list-with-insert-edit";
+const rdPageListWithInsertRemoveId = "list-with-insert-remove";
 const rdPageListWithEditRemoveId = "list-with-edit-remove";
+const rdPageListWithInsertEditRemoveId = "list-with-insert-edit-remove";
 const listWithItemIds = [
+    rdPageInsertFormId,
+    rdPageInsertEditFormId,
+    rdPageListWithInsertId,
     rdPageListWithEditId,
     rdPageListWithRemoveId,
-    rdPageListWithEditRemoveId
+    rdPageListWithInsertEditId,
+    rdPageListWithInsertRemoveId,
+    rdPageListWithEditRemoveId,
+    rdPageListWithInsertEditRemoveId
 ]
 
 const pages = []
