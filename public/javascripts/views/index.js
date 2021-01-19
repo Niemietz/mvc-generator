@@ -1,4 +1,8 @@
-import getLanguage from '/javascripts/tabs/language-chooser.js';
+import getLanguage from '/javascripts/views/language-chooser.js';
+import getDatabase from '/javascripts/tabs/database.js';
+import getFramework from '/javascripts/tabs/framework-libs.js';
+import getModels from '/javascripts/tabs/model-adder.js';
+import { getPages } from '/javascripts/tabs/page-adder.js';
 
 const btnNavLinkClass = "nav-link";
 const divContentClass = "content";
@@ -92,15 +96,28 @@ function setPageStatus(status, loadingText = "Carregando...")
     }
 }
 
+function getGeneratorData() {
+    return {
+        "database": getDatabase(),
+        "language": getLanguage(),
+        "framework": getFramework(),
+        "models": getModels(),
+        "pages": getPages()
+    }
+}
+
 $(document).ready(function(e)
 {
-    $('[data-toggle="tooltip"]').tooltip()
+    document.querySelectorAll(".mdb-tooltip").forEach((elem) => {
+        new mdb.Tooltip(elem)
+    })
+
     document.querySelectorAll('.form-outline').forEach((formOutline) => {
         new mdb.Input(formOutline).init();
     });
 
     $("#" + btnGenerateFilesId).unbind().click(function(e)
     {
-        console.log("Generating File...", getLanguage());
+        console.log("Generating File...", getGeneratorData());
     });
 });

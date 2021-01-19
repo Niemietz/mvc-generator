@@ -3,7 +3,7 @@
 	<head>
 		<title><%= title %></title>
 	</head>
-	<body class="kind-steel-gradient color-block mb-3 mx-auto">
+	<body class="kind-steel-gradient color-block p-3 mx-auto">
 		<!-- Font Awesome 5.15.1 -->
 		<!-- <link rel="stylesheet" href="stylesheets/all.min.css"> -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
@@ -15,6 +15,7 @@
 		<!-- Animate CSS -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
+		<link rel="stylesheet" href="stylesheets/database.css">
 		<link rel="stylesheet" href="stylesheets/language-chooser.css">
 		<link rel="stylesheet" href="stylesheets/custom.css">
 
@@ -31,19 +32,47 @@
 		<script type="text/javascript" src="javascripts/common.js"></script>
 		<script type="module" src="javascripts/tabs/page-adder.js"></script>
 		<script type="module" src="javascripts/tabs/model-adder.js"></script>
-		<script type="module" src="javascripts/tabs/language-chooser.js"></script>
+		<script type="module" src="javascripts/tabs/database.js"></script>
+		<script type="module" src="javascripts/views/language-chooser.js"></script>
 		<script type="module" src="javascripts/tabs/framework-libs.js"></script>
 		<script type="module" src="javascripts/views/index.js"></script>
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<h5 style="text-transform: uppercase;">MVC Generator</h5>
+				</div>
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pb-3" style="
+					border: 1px solid #cdccc9;
+					border-radius: 5px;
+				">
+					<div class="languages">
+						<div id="php" class="language mdb-tooltip" value="1" data-mdb-toggle="tooltip" data-mdb-placement="top" title="PHP" checked>
+							<i class="fab fa-php"></i>
+							<span>PHP</span>
+						</div>
+						<div id="java" class="language mdb-tooltip" value="2" data-mdb-toggle="tooltip" data-mdb-placement="top" title="Java">
+							<i class="fab fa-java"></i>
+							<span>Java</span>
+						</div>
+						<div id="android" class="language mdb-tooltip" value="3" data-mdb-toggle="tooltip" data-mdb-placement="top" title="Android">
+							<i class="fab fa-android"></i>
+							<span>Android</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row mt-3">				
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pb-3" style="
+						border: 1px solid #cdccc9;
+						border-radius: 5px;
+					">
 					<header>
 						<ul class="nav nav-tabs" id="myTab" role="tablist" style="border-top-left-radius: .25rem; border-top-right-radius: .25rem;">
 							<li class="nav-item">
-								<a class="nav-link active" id="choose-language-tab" data-mdb-toggle="tab" href="#choose-language" role="tab" aria-controls="choose-language" aria-selected="true">Linguagem</a>
+								<a class="nav-link active" id="database-tab" data-mdb-toggle="tab" href="#database" role="tab" aria-controls="database" aria-selected="false">Banco de Dados</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" id="models-tab" data-mdb-toggle="tab" href="#models" role="tab" aria-controls="models" aria-selected="false">Models</a>
+								<a class="nav-link" id="models-tab" data-mdb-toggle="tab" href="#models" role="tab" aria-controls="models" aria-selected="false">Classes (Models)</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" id="pages-tab" data-mdb-toggle="tab" href="#pages" role="tab" aria-controls="pages" aria-selected="false">Páginas</a>
@@ -51,15 +80,12 @@
 							<li class="nav-item">
 								<a class="nav-link" id="frameworks-libs-tab" data-mdb-toggle="tab" href="#frameworks-libs" role="tab" aria-controls="frameworks-libs" aria-selected="false">Frameworks e Bibliotecas</a>
 							</li>
-							<li class="nav-item">
-								<a class="nav-link" id="view-controller-tab" data-mdb-toggle="tab" href="#view-controller" role="tab" aria-controls="view-controller" aria-selected="false">View/Controller</a>
-							</li>
 						</ul>
 					</header>
 					<div class="tab-content" id="myTabContent">
-						<div class="tab-pane fade show active" id="choose-language" role="tabpanel" aria-labelledby="choose-language-tab">
+						<div class="tab-pane show active" id="database" role="tabpanel" aria-labelledby="database-tab">
 							<%- include loading.ejs %>
-							<%- include tabs/choose-language.ejs %>
+							<%- include tabs/database.ejs %>
 						</div>
 						<div class="tab-pane fade" id="models" role="tabpanel" aria-labelledby="models-tab">
 							<%- include loading.ejs %>
@@ -72,10 +98,6 @@
 						<div class="tab-pane fade" id="frameworks-libs" role="tabpanel" aria-labelledby="frameworks-libs-tab">
 							<%- include loading.ejs %>
 							<%- include tabs/frameworks-libs.ejs %>
-						</div>
-						<div class="tab-pane fade" id="view-controller" role="tabpanel" aria-labelledby="view-controller-tab">
-							<%- include loading.ejs %>
-							<%- include tabs/view-controller.ejs %>
 						</div>
 					</div>
 				</div>

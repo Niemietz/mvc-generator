@@ -1,332 +1,328 @@
 <div class="content">
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-            <table class="table table-striped text-body">
-                <thead>
-                    <tr>
-                        <th scope="col" class="h3" style="text-transform: uppercase">Frameworks</th>
-                    </tr>
-                </thead>
-                <tbody id="frameworks-body-table">
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="bootstrap" />
-                                <label class="form-check-label" for="bootstrap">
-                                    Bootstrap
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="mdb" />
-                                <label class="form-check-label" for="mdb">
-                                    Material Design for Bootstrap
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="materialize" />
-                                <label class="form-check-label" for="materialize">
-                                    Materialize
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-            <table class="table table-striped text-body">
-                <thead>
-                    <tr>
-                        <th scope="col" class="h3" style="text-transform: uppercase">Bibliotecas</th>
-                    </tr>
-                </thead>
-                <tbody id="libs-body-table" class="d-block" style="
-                    overflow-x: auto;
-                    overflow-y: scroll;
-                    height: 166px;
-                ">
-                    <tr>
-                        <td class="p-0" style="
-                            background: transparent;
-                            border: none;
-                        ">
-                            <div class="row">
-                                <div class="col-4" style="
-                                    vertical-align: middle;
-                                    line-height: 2;
-                                ">
-                                    // Android
+    <form id="frameworks-form">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <table class="table table-striped text-body">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="h5" style="text-transform: uppercase">Frameworks</th>
+                        </tr>
+                    </thead>
+                    <tbody id="frameworks-body-table">
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="frameworks" value="1" id="bootstrap" checked />
+                                    <label class="form-check-label" for="default">Bootstrap</label>
                                 </div>
-                                <div class="col-8">
-                                    <hr/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="frameworks" value="2" id="mdb" />
+                                    <label class="form-check-label" for="mdb">Material Design for Bootstrap</label>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="lifecycle" checked />
-                                <label class="form-check-label" for="lifecycle">
-                                    Lifecycle
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="cardview" checked />
-                                <label class="form-check-label" for="cardview">
-                                    Cardview
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="
-                            border: none;
-                        ">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="recyclerview" checked />
-                                <label class="form-check-label" for="recyclerview">
-                                    RecyclerView
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="p-0" style="
-                            background: transparent;
-                            border: none;
-                        ">
-                            <div class="row">
-                                <div class="col-7" style="
-                                    vertical-align: middle;
-                                    line-height: 2;
-                                ">
-                                    // Design System
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="frameworks" value="3" id="materialize" />
+                                    <label class="form-check-label" for="materialize">Materialize</label>
                                 </div>
-                                <div class="col-5">
-                                    <hr/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <table class="table table-striped text-body">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="h5" style="text-transform: uppercase">Bibliotecas</th>
+                        </tr>
+                    </thead>
+                    <tbody id="libs-body-table" class="d-block" style="
+                        overflow-x: auto;
+                        overflow-y: scroll;
+                        height: 166px;
+                    ">
+                        <tr>
+                            <td class="p-0" style="
+                                background: transparent;
+                                border: none;
+                            ">
+                                <div class="row">
+                                    <div class="col-4" style="
+                                        vertical-align: middle;
+                                        line-height: 2;
+                                    ">
+                                        // Android
+                                    </div>
+                                    <div class="col-8">
+                                        <hr/>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="uicomponents" checked />
-                                <label class="form-check-label" for="uicomponents">
-                                    UIComponents
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="material-design-for-android" checked />
-                                <label class="form-check-label" for="material-design-for-android">
-                                    Material Design for Android
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="
-                            border: none;
-                        ">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="lottie" checked />
-                                <label class="form-check-label" for="lottie">
-                                    Lottie
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="p-0" style="
-                            background: transparent;
-                            border: none;
-                        ">
-                            <div class="row">
-                                <div class="col-7" style="
-                                    vertical-align: middle;
-                                    line-height: 2;
-                                ">
-                                    // Google / Firebase
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="lifecycle" checked />
+                                    <label class="form-check-label" for="lifecycle">
+                                        Lifecycle
+                                    </label>
                                 </div>
-                                <div class="col-5">
-                                    <hr/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="cardview" checked />
+                                    <label class="form-check-label" for="cardview">
+                                        Cardview
+                                    </label>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="firebasecore" checked />
-                                <label class="form-check-label" for="firebasecore">
-                                    FirebaseCore
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="firebasestorage" checked />
-                                <label class="form-check-label" for="firebasestorage">
-                                    FirebaseStorage
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="firebasefirestore" checked />
-                                <label class="form-check-label" for="firebasefirestore">
-                                    FirebaseFirestore
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="firebaseauth" checked />
-                                <label class="form-check-label" for="firebaseauth">
-                                    FirebaseAuth
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="
-                            border: none;
-                        ">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="firebasemessaging" checked />
-                                <label class="form-check-label" for="firebasemessaging">
-                                    FirebaseMessaging
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="p-0" style="
-                            background: transparent;
-                            border: none;
-                        ">
-                            <div class="row">
-                                <div class="col-6" style="
-                                    vertical-align: middle;
-                                    line-height: 2;
-                                ">
-                                    // API Request
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="
+                                border: none;
+                            ">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="recyclerview" checked />
+                                    <label class="form-check-label" for="recyclerview">
+                                        RecyclerView
+                                    </label>
                                 </div>
-                                <div class="col-6">
-                                    <hr/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-0" style="
+                                background: transparent;
+                                border: none;
+                            ">
+                                <div class="row">
+                                    <div class="col-7" style="
+                                        vertical-align: middle;
+                                        line-height: 2;
+                                    ">
+                                        // Design System
+                                    </div>
+                                    <div class="col-5">
+                                        <hr/>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="retrofit" checked />
-                                <label class="form-check-label" for="retrofit">
-                                    Retrofit
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="
-                            border: none;
-                        ">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="coroutines" checked />
-                                <label class="form-check-label" for="coroutines">
-                                    Coroutines
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="p-0" style="
-                            background: transparent;
-                            border: none;
-                        ">
-                            <div class="row">
-                                <div class="col-6" style="
-                                    vertical-align: middle;
-                                    line-height: 2;
-                                ">
-                                    // External Libs
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="uicomponents" checked />
+                                    <label class="form-check-label" for="uicomponents">
+                                        UIComponents
+                                    </label>
                                 </div>
-                                <div class="col-6">
-                                    <hr/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="material-design-for-android" checked />
+                                    <label class="form-check-label" for="material-design-for-android">
+                                        Material Design for Android
+                                    </label>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="floatingsearchview" checked />
-                                <label class="form-check-label" for="floatingsearchview">
-                                    FloatingSearchView
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="speeddial" checked />
-                                <label class="form-check-label" for="speeddial">
-                                    SpeedDial
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="1" id="avatargenerator" checked />
-                                <label class="form-check-label" for="avatargenerator">
-                                    AvatarGenerator
-                                </label>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-            <div class="form-outline">
-                <textarea class="form-control active" id="libs-code" rows="10"></textarea>
-                <label class="form-label" for="libs-code">Gradle</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="
+                                border: none;
+                            ">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="lottie" checked />
+                                    <label class="form-check-label" for="lottie">
+                                        Lottie
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-0" style="
+                                background: transparent;
+                                border: none;
+                            ">
+                                <div class="row">
+                                    <div class="col-7" style="
+                                        vertical-align: middle;
+                                        line-height: 2;
+                                    ">
+                                        // Google / Firebase
+                                    </div>
+                                    <div class="col-5">
+                                        <hr/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="firebasecore" checked />
+                                    <label class="form-check-label" for="firebasecore">
+                                        FirebaseCore
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="firebasestorage" checked />
+                                    <label class="form-check-label" for="firebasestorage">
+                                        FirebaseStorage
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="firebasefirestore" checked />
+                                    <label class="form-check-label" for="firebasefirestore">
+                                        FirebaseFirestore
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="firebaseauth" checked />
+                                    <label class="form-check-label" for="firebaseauth">
+                                        FirebaseAuth
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="
+                                border: none;
+                            ">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="firebasemessaging" checked />
+                                    <label class="form-check-label" for="firebasemessaging">
+                                        FirebaseMessaging
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-0" style="
+                                background: transparent;
+                                border: none;
+                            ">
+                                <div class="row">
+                                    <div class="col-6" style="
+                                        vertical-align: middle;
+                                        line-height: 2;
+                                    ">
+                                        // API Request
+                                    </div>
+                                    <div class="col-6">
+                                        <hr/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="retrofit" checked />
+                                    <label class="form-check-label" for="retrofit">
+                                        Retrofit
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="
+                                border: none;
+                            ">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="coroutines" checked />
+                                    <label class="form-check-label" for="coroutines">
+                                        Coroutines
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="p-0" style="
+                                background: transparent;
+                                border: none;
+                            ">
+                                <div class="row">
+                                    <div class="col-6" style="
+                                        vertical-align: middle;
+                                        line-height: 2;
+                                    ">
+                                        // External Libs
+                                    </div>
+                                    <div class="col-6">
+                                        <hr/>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="floatingsearchview" checked />
+                                    <label class="form-check-label" for="floatingsearchview">
+                                        FloatingSearchView
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="speeddial" checked />
+                                    <label class="form-check-label" for="speeddial">
+                                        SpeedDial
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="1" id="avatargenerator" checked />
+                                    <label class="form-check-label" for="avatargenerator">
+                                        AvatarGenerator
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-            <div class="form-outline">
-                <textarea class="form-control active" id="libs-versions-code" rows="10"></textarea>
-                <label class="form-label" for="libs-code">Gradle Versions</label>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="form-outline">
+                    <textarea class="form-control active" id="libs-code" rows="10"></textarea>
+                    <label class="form-label" for="libs-code">Gradle</label>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                <div class="form-outline">
+                    <textarea class="form-control active" id="libs-versions-code" rows="10"></textarea>
+                    <label class="form-label" for="libs-code">Gradle Versions</label>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>

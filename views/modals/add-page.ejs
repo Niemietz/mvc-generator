@@ -1,5 +1,5 @@
 <div class="modal fade" id="add-page-modal" tabindex="-1" role="dialog" aria-labelledby="add-page-title" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title text-dark" id="add-page-title">Adicionar Página</h5>
@@ -9,55 +9,88 @@
             </div>
             <div class="modal-body">
                 <form id="add-page-form">
-                    <input name="name" class="form-control" type="text" placeholder="Nome">
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="page-type" value="1" id="default" checked />
-                        <label class="form-check-label" for="default">Padrão</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="page-type" value="2" id="insert-form" />
-                        <label class="form-check-label" for="insert-form">Formulário de inserir</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="page-type" value="3" id="insert-edit-form" />
-                        <label class="form-check-label" for="insert-edit-form">Formulário de inserir e editar</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="page-type" value="4" id="simple-list" />
-                        <label class="form-check-label" for="simple-list">Lista simples</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="page-type" value="5" id="list-with-insert" />
-                        <label class="form-check-label" for="list-with-insert">Lista com botão de inserir</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="page-type" value="6" id="list-with-edit" />
-                        <label class="form-check-label" for="list-with-edit">Lista com botão de editar</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="page-type" value="7" id="list-with-remove" />
-                        <label class="form-check-label" for="list-with-remove">Lista com botão de remover</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="page-type" value="8" id="list-with-insert-edit" />
-                        <label class="form-check-label" for="list-with-insert-edit">Lista com botão de inserir e editar</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="page-type" value="9" id="list-with-edit-remove" />
-                        <label class="form-check-label" for="list-with-edit-remove">Lista com botão de editar e remover</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="page-type" value="10" id="list-with-insert-remove" />
-                        <label class="form-check-label" for="list-with-insert-remove">Lista com botão de inserir e remover</label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="page-type" value="11" id="list-with-edit-remove" />
-                        <label class="form-check-label" for="list-with-insert-edit-remove">Lista com botão de inserir, editar e remover</label>
-                      </div>
-                      <div id="page-models-table" class="d-none">
-                        <hr>
-                        <h5 style="text-transform: uppercase">Models</h5>
-                      </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                            <div class="form-outline">
+                                <input name="name" id="name" type="text" class="form-control" />
+                                <label class="form-label" for="name">Nome</label>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                            <div class="form-outline">
+                                <input name="route" id="route" type="text" class="form-control" />
+                                <label class="form-label" for="route">Rota</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="form-outline">
+								<textarea name="page-description" class="form-control" id="page-description" rows="4"></textarea>
+								<label class="form-label" for="page-description">Descrição</label>
+							</div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="form-outline">
+								<textarea name="keywords" class="form-control" id="keywords" rows="2"></textarea>
+								<label class="form-label" for="keywords">Palavras-chave (Separado por vírgula)</label>
+							</div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="page-type" value="1" id="default" checked />
+                                <label class="form-check-label" for="default">Padrão</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="page-type" value="2" id="insert-form" />
+                                <label class="form-check-label" for="insert-form">Formulário de inserir</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="page-type" value="3" id="insert-edit-form" />
+                                <label class="form-check-label" for="insert-edit-form">Formulário de inserir e editar</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="page-type" value="4" id="simple-list" />
+                                <label class="form-check-label" for="simple-list">Lista simples</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="page-type" value="5" id="list-with-insert" />
+                                <label class="form-check-label" for="list-with-insert">Lista com botão de inserir</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="page-type" value="6" id="list-with-edit" />
+                                <label class="form-check-label" for="list-with-edit">Lista com botão de editar</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="page-type" value="7" id="list-with-remove" />
+                                <label class="form-check-label" for="list-with-remove">Lista com botão de remover</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="page-type" value="8" id="list-with-insert-edit" />
+                                <label class="form-check-label" for="list-with-insert-edit">Lista com botão de inserir e editar</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="page-type" value="9" id="list-with-edit-remove" />
+                                <label class="form-check-label" for="list-with-edit-remove">Lista com botão de editar e remover</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="page-type" value="10" id="list-with-insert-remove" />
+                                <label class="form-check-label" for="list-with-insert-remove">Lista com botão de inserir e remover</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="page-type" value="11" id="list-with-edit-remove" />
+                                <label class="form-check-label" for="list-with-insert-edit-remove">Lista com botão de inserir, editar e remover</label>
+                            </div>
+                            <div id="page-models-table" class="d-none">
+                                <hr>
+                                <h5 style="text-transform: uppercase">Classes (Models)</h5>
+                            </div>
+                        </div>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

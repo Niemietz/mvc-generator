@@ -1,9 +1,11 @@
-import getLanguage from '/javascripts/tabs/language-chooser.js';
+import getLanguage from '/javascripts/views/language-chooser.js';
 
 const tblFrameworksBodyTableId = "frameworks-libs-body-table";
 const tblLibsBodyTableId = "libs-body-table";
 const txtLibsCodeId="libs-code"
 const txtLibsVersionsCodeId="libs-versions-code"
+const frmFrameworksId = "frameworks-form"
+const radFrameworksName = "frameworks"
 
 const chkUIComponentsId="uicomponents"
 const chkMaterialDesignForAndroidId="material-design-for-android"
@@ -343,6 +345,8 @@ function getGradlewDepenciesText() {
     return gradlewDepenciesText
 }
 
+const framework = { "id": 1, "framework": "Bootstrap" }
+
 $(document).ready(function()
 {
     document.getElementById(txtLibsCodeId).innerHTML = getCodeText()
@@ -350,6 +354,14 @@ $(document).ready(function()
 
     const frameworksBodyTable = $(`#${tblFrameworksBodyTableId}`);
     const libsBodyTable = $(`#${tblLibsBodyTableId}`);
+
+    document.getElementsByName(radFrameworksName).forEach((radFramework) => {
+        radFramework.onclick = function (ev) {
+            const selectedFrameworkLabel = this.parentNode.querySelector("label")
+            framework.id = parseInt(this.value)
+            framework.framework = selectedFrameworkLabel.innerHTML
+        }
+    })
 
     // Android
 
@@ -601,3 +613,7 @@ $(document).ready(function()
         document.getElementById(txtLibsVersionsCodeId).innerHTML = getGradlewDepenciesText()
     }
 });
+
+export default function() {
+    return framework;
+}

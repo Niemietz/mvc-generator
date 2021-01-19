@@ -9,6 +9,9 @@ const divNoPageId = "no-page-warning";
 const rdPageTypeName = "page-type";
 
 const inpAddPageNameId = "name";
+const inpAddPageRouteName = "route";
+const inpAddPageDescriptionName = "page-description";
+const inpAddPageKeywordsName = "keywords"
 const rdPageModelName = "page-model";
 const inpAddPageModelsTableId = "page-models-table";
 const rdPageDefaultId = "default";
@@ -38,8 +41,14 @@ let currentEditPage = null
 
 function fillAddPageModal(data) {
     document.getElementById(frmAddPageFormId)[inpAddPageNameId].value = data["name"]
+    
+    document.getElementById(frmAddPageFormId)[inpAddPageRouteName].value = data["route"]
+    
+    document.getElementById(frmAddPageFormId)[inpAddPageDescriptionName].value = data["description"]
+    
+    document.getElementById(frmAddPageFormId)[inpAddPageKeywordsName].value = data["keywords"].join(",")
 
-    const typeCheckbox = document.getElementById(frmAddPageFormId).querySelector(`input[value="${data["type"]}"]`)
+    const typeCheckbox = document.getElementById(frmAddPageFormId).querySelector(`input[value="${data["type"]["id"]}"]`)
     typeCheckbox.click()
 
     if (listWithItemIds.includes(typeCheckbox.id)) {
@@ -142,24 +151,58 @@ $(document).ready(function()
         if (currentEditPage != null) {
             currentEditPage.name = newPageData[inpAddPageNameId]
 
+            currentEditPage.route = newPageData[inpAddPageRouteName]
+
+            currentEditPage.description = newPageData[inpAddPageDescriptionName]
+
+            const keywords = newPageData[inpAddPageKeywordsName].split(",")
+            const keywordsToRemove = []
+            for (let i = 0; i < keywords.length; i++) {
+                if(keywords[i].spaceStringOnly()) {
+                    keywordsToRemove.push(i)
+                } else {
+                    keywords[i] = keywords[i].trim().leftTrim()
+                    if (keywords[i].length == 0) {
+                        keywords.splice(i, 1);
+                    }
+                }
+            }
+
+            for (var i = keywordsToRemove.length -1; i >= 0; i--) {
+                keywords.splice(keywordsToRemove[i], 1);
+            }
+
+            currentEditPage.keywords = keywords
+
             currentEditPage.type = parseInt(document.querySelector(`input[name="${rdPageTypeName}"]:checked`).value)
 
             const tableLine = document.getElementById(currentEditPage.id)
             const type = document.querySelector(`input[name="${rdPageTypeName}"]:checked`).parentNode
             .querySelector("label").innerHTML
-            currentEditPage.typeText = type
+
+            currentEditPage.type = {
+                "id": parseInt(document.querySelector(`input[name="${rdPageTypeName}"]:checked`).value),
+                "text": type
+            }
 
             if (listWithItemIds.includes(document.querySelector(`input[name="${rdPageTypeName}"]:checked`).id)) {
                 const checkedPageModel = document.querySelector(`input[name="${rdPageModelName}"]:checked`)
                 const item = checkedPageModel.parentNode.querySelector("label").innerHTML
-                tableLine.childNodes[2].innerHTML = `${type} (${item})`
+                tableLine.childNodes[5].innerHTML = `${type} (${item})`
                 currentEditPage.item = { "model": item, "id": checkedPageModel.id }
             } else {
-                tableLine.childNodes[2].innerHTML = `${type}`
+                tableLine.childNodes[5].innerHTML = `${type}`
                 currentEditPage.item = { "model": null, "id": null }
             }
 
             tableLine.childNodes[1].innerHTML = currentEditPage.name
+            tableLine.childNodes[2].innerHTML = `/${currentEditPage.route.toLowerCase()}`
+            tableLine.childNodes[3].innerHTML = currentEditPage.description
+            const keywordsToShow = keywords.slice()
+            for (let i = 0; i < keywordsToShow.length; i++) {
+                keywordsToShow[i] = keywordsToShow[i].replace(" ", "-")
+            }
+            tableLine.childNodes[4].innerHTML = keywordsToShow.join(" ")
         } else {
             let newPage = {}
 
@@ -174,22 +217,61 @@ $(document).ready(function()
             newPage.name = newPageData[inpAddPageNameId]
 
             const newPageCol2 = document.createElement("td");
-            newPageCol2.innerHTML = document.querySelector(`input[name="${rdPageTypeName}"]:checked`).parentNode
+            newPageCol2.innerHTML = `/${newPageData[inpAddPageRouteName].toLowerCase()}`;
+
+            newPage.route = newPageData[inpAddPageRouteName]
+
+            const newPageCol3 = document.createElement("td");
+            newPageCol3.innerHTML = newPageData[inpAddPageDescriptionName];
+
+            newPage.description = newPageData[inpAddPageDescriptionName]
+
+            const keywords = newPageData[inpAddPageKeywordsName].split(",")
+            const keywordsToRemove = []
+            for (let i = 0; i < keywords.length; i++) {
+                if(keywords[i].spaceStringOnly()) {
+                    keywordsToRemove.push(i)
+                } else {
+                    keywords[i] = keywords[i].trim().leftTrim()
+                    if (keywords[i].length == 0) {
+                        keywords.splice(i, 1);
+                    }
+                }
+            }
+
+            for (var i = keywordsToRemove.length -1; i >= 0; i--) {
+                keywords.splice(keywordsToRemove[i], 1);
+            }
+
+            const keywordsToShow = keywords.slice()
+            for (let i = 0; i < keywordsToShow.length; i++) {
+                keywordsToShow[i] = keywordsToShow[i].replace(" ", "-")
+            }
+
+            const newPageCol4 = document.createElement("td");
+            newPageCol4.innerHTML = keywordsToShow.join(" ");
+
+            newPage.keywords = keywords
+
+            const newPageCol5 = document.createElement("td");
+            newPageCol5.innerHTML = document.querySelector(`input[name="${rdPageTypeName}"]:checked`).parentNode
                 .querySelector("label").innerHTML;
 
             if (listWithItemIds.includes(document.querySelector(`input[name="${rdPageTypeName}"]:checked`).id)) {
                 const checkedPageModel = document.querySelector(`input[name="${rdPageModelName}"]:checked`)
                 const item = checkedPageModel.parentNode
                 .querySelector("label").innerHTML
-                newPageCol2.innerHTML += ` (${item})`
+                newPageCol5.innerHTML += ` (${item})`
                 newPage.item = { "model": item, "id": checkedPageModel.id }
             } else {
                 newPage.item = { "model": null, "id": null }
             }
 
-            newPage.typeText = document.querySelector(`input[name="${rdPageTypeName}"]:checked`).parentNode
-                .querySelector("label").innerHTML
-            newPage.type = parseInt(document.querySelector(`input[name="${rdPageTypeName}"]:checked`).value)
+            newPage.type = {
+                "id": parseInt(document.querySelector(`input[name="${rdPageTypeName}"]:checked`).value),
+                "text": document.querySelector(`input[name="${rdPageTypeName}"]:checked`).parentNode
+                    .querySelector("label").innerHTML
+            }
 
             const newPageRemoveButton = document.createElement("button");
             newPageRemoveButton.setAttribute("type", "button");
@@ -212,9 +294,9 @@ $(document).ready(function()
                 $(`#${mdlAddPageModalId}`).modal('show');
             }
 
-            const newPageCol3 = document.createElement("td");
-            newPageCol3.append(newPageRemoveButton)
-            newPageCol3.append(newPageEditButton)
+            const newPageCol6 = document.createElement("td");
+            newPageCol6.append(newPageRemoveButton)
+            newPageCol6.append(newPageEditButton)
 
             const newPageLine = document.createElement("tr");
             newPageLine.id = newPage.id
@@ -222,6 +304,9 @@ $(document).ready(function()
             newPageLine.append(newPageCol1)
             newPageLine.append(newPageCol2)
             newPageLine.append(newPageCol3)
+            newPageLine.append(newPageCol4)
+            newPageLine.append(newPageCol5)
+            newPageLine.append(newPageCol6)
 
             const pagesTableBody = document.getElementById(tblPagesBodyTableId)
             pagesTableBody.append(newPageLine)
@@ -271,10 +356,14 @@ export function changePageFromModelChange(modelId, modelName) {
     
         pagesTableBody.childNodes.forEach((tr) => {
             if (tr.id == page.id) {
-                tr.childNodes[2].innerHTML = `${page.typeText} (${modelName})`
+                tr.childNodes[5].innerHTML = `${page.typeText} (${modelName})`
             }
         })
     }
 }
 
-export default { removePageFromModelId, changePageFromModelChange }
+export function getPages() {
+    return pages
+}
+
+export default { getPages, removePageFromModelId, changePageFromModelChange }

@@ -8,9 +8,9 @@
     cursor: pointer;
     height:50px;
     width:50px;
-    line-height: 4;
+    line-height: 7;
     text-align: center;
-    display:inline-block;
+    display:inline-grid;
     margin-right: 25px;
 }
 

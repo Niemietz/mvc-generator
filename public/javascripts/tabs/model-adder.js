@@ -12,7 +12,9 @@ const divNoModelId = "no-model-warning";
 const inpAddModelName = "name";
 const inpAddModelAttribute = "attribute";
 const inpAddModelColumnName = "column-name";
+const selAttributeTypeId = "attribute-type";
 const selAttributeTypeName = "attribute-type";
+const inpAddModelHasListName = "has-list";
 const inpAddModelSelect = "select";
 const inpAddModelUpdate = "update";
 const inpAddModelInsert = "insert";
@@ -56,22 +58,35 @@ function addNewModelAttributeLine(attribute, columnName, type) {
     ]
 
     const newModelAttributeTypeSelect = document.createElement("select");
+    newModelAttributeTypeSelect.setAttribute("id", selAttributeTypeId);
     newModelAttributeTypeSelect.setAttribute("name", selAttributeTypeName);
     newModelAttributeTypeSelect.classList.add("form-select");
 
     attributeTypes.forEach((attributeType, index) => {
         const newModelAttributeType = document.createElement("option");
-        newModelAttributeType.setAttribute("value", attributeType);
+        newModelAttributeType.setAttribute("value", index + 1);
         newModelAttributeType.innerHTML = attributeType
 
-        if (type != null && type.length > 0 && type == attributeType) {
+        if (type != null && type > 0 && type == (index + 1)) {
+            newModelAttributeType.setAttribute("selected", true)
             newModelAttributeType.selected = true
         } else if (type == null && index == 0) {
+            newModelAttributeType.setAttribute("selected", true)
             newModelAttributeType.selected = true
         }
 
         newModelAttributeTypeSelect.append(newModelAttributeType)
     })
+    
+    newModelAttributeTypeSelect.onchange = function(ev) {
+        const selected = this.querySelector(`option[value="${this.value}"]`)
+        selected.setAttribute("selected", true)
+        this.childNodes.forEach((node) => {
+            if (node != selected) {
+                node.removeAttribute("selected")
+            }
+        })
+    }
     
     const newModelAttributeTypeColumn = document.createElement("td");
     newModelAttributeTypeColumn.append(newModelAttributeTypeSelect)
@@ -112,7 +127,7 @@ function fillAddModelModal(data) {
     for (let i = 0; i < data["attributesAndColumnNames"].length; i++) {
         const attribute = data["attributesAndColumnNames"][i]["attribute"]
         const columnName = data["attributesAndColumnNames"][i]["columnName"]
-        const type = data["attributesAndColumnNames"][i]["type"]
+        const type = data["attributesAndColumnNames"][i]["type"]["id"]
 
         addNewModelAttributeLine(attribute, columnName, type)
     }
@@ -141,6 +156,12 @@ function fillAddModelModal(data) {
         document.getElementById(frmAddModelFormId)[inpAddModelDelete].removeAttribute("checked")
     }
 
+    if (data["hasList"]) {
+        document.getElementById(frmAddModelFormId)[inpAddModelHasListName].setAttribute("checked", true)
+    } else {
+        document.getElementById(frmAddModelFormId)[inpAddModelHasListName].removeAttribute("checked")
+    }
+
     $(`#${btnAddModelId}`).text("Editar");
 }
 
@@ -166,6 +187,10 @@ function resetAddModelModal() {
     const deleteCheck = document.getElementById(frmAddModelFormId)[inpAddModelDelete]
     deleteCheck.setAttribute("checked", true)
     deleteCheck.value = "1"
+
+    const hasListCheck = document.getElementById(frmAddModelFormId)[inpAddModelHasListName]
+    hasListCheck.removeAttribute("checked")
+    hasListCheck.value = "0"
 
     $(`#${btnAddModelId}`).text("Adicionar")
 }
@@ -215,6 +240,14 @@ $(document).ready(function()
             deleteCheckbox.value = "1"
         } else {
             deleteCheckbox.value = "0"
+        }
+    }
+    const hasListCheckbox = addModelForm[inpAddModelHasListName]
+    hasListCheckbox.onchange = () => {
+        if(hasListCheckbox.checked) {
+            hasListCheckbox.value = "1"
+        } else {
+            hasListCheckbox.value = "0"
         }
     }
 
@@ -281,15 +314,26 @@ $(document).ready(function()
             newModelData[inpAddModelDelete] = false
         }
 
+        if (newModelData[inpAddModelHasListName] == "1") {
+            newModelData[inpAddModelHasListName] = true
+        } else {
+            newModelData[inpAddModelHasListName] = false
+        }
+
         if (currentEditModel != null) {
             currentEditModel.name = newModelData[inpAddModelName]
+
+            const typeText = document.getElementById(selAttributeTypeId).querySelector('option[selected="true"]').innerHTML
 
             currentEditModel.attributesAndColumnNames = []
             for(let i = 0; i < newModelData[inpAddModelAttribute].length; i++) {
                 currentEditModel.attributesAndColumnNames.push({
                     "attribute": newModelData[inpAddModelAttribute][i],
                     "columnName": newModelData[inpAddModelColumnName][i],
-                    "type": newModelData[selAttributeTypeName][i]
+                    "type": {
+                        "id": parseInt(newModelData[selAttributeTypeName][i]),
+                        "text": typeText
+                    }
                 })
             }
 
@@ -301,8 +345,10 @@ $(document).ready(function()
 
             currentEditModel.delete = newModelData[inpAddModelDelete]
 
+            currentEditModel.hasList = newModelData[inpAddModelHasListName]
+
             const tableLine = document.getElementById(currentEditModel.id)
-            tableLine.childNodes[1].innerHTML = currentEditModel.name
+            tableLine.childNodes[1].innerHTML = `${currentEditModel.name} (${typeText})`
             const selectCheck = tableLine.childNodes[2].querySelector(".select")
             if (currentEditModel.select) {
                 selectCheck.setAttribute("checked", true)
@@ -327,6 +373,12 @@ $(document).ready(function()
             } else {
                 deleteCheck.removeAttribute("checked")
             }
+            const hasListCheck = tableLine.childNodes[3].querySelector(".has-list")
+            if (currentEditModel.hasList) {
+                hasListCheck.setAttribute("checked", true)
+            } else {
+                hasListCheck.removeAttribute("checked")
+            }
 
             changePageFromModelChange(currentEditModel.id, currentEditModel.name)
         } else {
@@ -337,8 +389,10 @@ $(document).ready(function()
             const newModelLineHead = document.createElement("th");
             newModelLineHead.setAttribute("scope", "row");
 
+            const typeText = document.getElementById(selAttributeTypeId).querySelector('option[selected="true"]').innerHTML
+
             const newModelCol1 = document.createElement("td");
-            newModelCol1.innerHTML = newModelData[inpAddModelName];
+            newModelCol1.innerHTML = `${newModelData[inpAddModelName]} (${typeText})`;
 
             newModel.name = newModelData[inpAddModelName]
 
@@ -347,7 +401,10 @@ $(document).ready(function()
                 newModel.attributesAndColumnNames.push({
                     "attribute": newModelData[inpAddModelAttribute][i],
                     "columnName": newModelData[inpAddModelColumnName][i],
-                    "type": newModelData[selAttributeTypeName][i]
+                    "type": {
+                        "id": parseInt(newModelData[selAttributeTypeName][i]),
+                        "text": typeText
+                    }
                 })
             }
 
@@ -368,7 +425,7 @@ $(document).ready(function()
             const newModelCheckSelectLabel = document.createElement("label");
             newModelCheckSelectLabel.classList.add("form-check-label")
             newModelCheckSelectLabel.innerHTML = "Select"
-            
+
             const newModelCheckSelectDiv = document.createElement("div");
             newModelCheckSelectDiv.classList.add("form-check")
             newModelCheckSelectDiv.classList.add("form-check-inline")
@@ -458,6 +515,33 @@ $(document).ready(function()
             newModelCol2.append(newModelCheckInsertDiv)
             newModelCol2.append(newModelCheckDeleteDiv)
 
+            const newModelCheckHasList = document.createElement("input");
+            newModelCheckHasList.setAttribute("type", "checkbox")
+            newModelCheckHasList.setAttribute("disabled", true)
+            newModelCheckHasList.classList.add("has-list")
+            newModelCheckHasList.classList.add("form-check-input")
+            if (newModelData[inpAddModelHasListName]) {
+                newModelCheckHasList.setAttribute("checked", true)
+                newModelCheckHasList.value = "1"
+            } else {
+                newModelCheckHasList.value = "0"
+            }
+
+            newModel.hasList = newModelData[inpAddModelHasListName]
+
+            const newModelCheckHasListLabel = document.createElement("label");
+            newModelCheckHasListLabel.classList.add("form-check-label")
+            newModelCheckHasListLabel.innerHTML = "Lista"
+
+            const newModelCheckHasListDiv = document.createElement("div");
+            newModelCheckHasListDiv.classList.add("form-check")
+            newModelCheckHasListDiv.classList.add("form-check-inline")
+            newModelCheckHasListDiv.append(newModelCheckHasList)
+            newModelCheckHasListDiv.append(newModelCheckHasListLabel)
+
+            const newModelCol3 = document.createElement("td");
+            newModelCol3.append(newModelCheckHasListDiv)
+
             const newModelRemoveButton = document.createElement("button");
             newModelRemoveButton.setAttribute("type", "button");
             newModelRemoveButton.classList.add("btn");
@@ -479,9 +563,9 @@ $(document).ready(function()
                 $(`#${mdlAddModelModalId}`).modal('show');
             }
 
-            const newModelCol3 = document.createElement("td");
-            newModelCol3.append(newModelRemoveButton)
-            newModelCol3.append(newModelEditButton)
+            const newModelCol4 = document.createElement("td");
+            newModelCol4.append(newModelRemoveButton)
+            newModelCol4.append(newModelEditButton)
 
             const newModelLine = document.createElement("tr");
             newModelLine.setAttribute("id", newModel.id)
@@ -489,6 +573,7 @@ $(document).ready(function()
             newModelLine.append(newModelCol1)
             newModelLine.append(newModelCol2)
             newModelLine.append(newModelCol3)
+            newModelLine.append(newModelCol4)
 
             const modelsTableBody = document.getElementById(tblModelsBodyTableId)
             modelsTableBody.append(newModelLine)
