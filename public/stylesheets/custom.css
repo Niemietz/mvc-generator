@@ -1,6 +1,5 @@
 body
 {
-    background-repeat: no-repeat;
     height: 100vh;
 }
 .nav-tabs .nav-link:hover
@@ -26,10 +25,10 @@ body
 .kind-steel-gradient {
     /* fallback for old browsers */
     background: #e9defa;
-
+  
     /* Chrome 10-25, Safari 5.1-6 */
-    background: -webkit-linear-gradient(to top, rgba(233, 222, 250, 1), rgba(251, 252, 219, 1));
-
+    background: -webkit-linear-gradient(to left, rgba(233, 222, 250, 1), rgba(251, 252, 219, 1));
+  
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    background: linear-gradient(to top, rgba(233, 222, 250, 1), rgba(251, 252, 219, 1))
+    background: linear-gradient(to left, rgba(233, 222, 250, 1), rgba(251, 252, 219, 1))
 }

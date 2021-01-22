@@ -4,51 +4,55 @@
 		<title><%= title %></title>
 	</head>
 	<body class="kind-steel-gradient color-block p-3 mx-auto">
+		<!----------------- STYLESHEETS ----------------->
+
 		<!-- Font Awesome 5.15.1 -->
 		<!-- <link rel="stylesheet" href="stylesheets/all.min.css"> -->
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
-		<!-- Bootstrap core CSS -->
-		<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+		
 		<!-- Material Design Bootstrap 5 / MDB UI Kit 3.1.0 -->
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.1.0/mdb.min.css" rel="stylesheet">
+		
+		<!-- Notiflix -->
+		<link rel="stylesheet" href="stylesheets/notiflix-2.7.0.min.css">
 
-		<!-- Animate CSS -->
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-
-		<link rel="stylesheet" href="stylesheets/database.css">
+		<!-- Custom -->
 		<link rel="stylesheet" href="stylesheets/language-chooser.css">
 		<link rel="stylesheet" href="stylesheets/custom.css">
 
+		<!----------------- SCRIPTS ----------------->
+
 		<!-- JQuery -->
 		<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-		<!-- Bootstrap core JavaScript and Popper 1.16.1 -->
-		<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js"></script> -->
+		
 		<!-- MDB core JavaScript -->
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.1.0/mdb.min.js"></script>
 
-		<!-- Bootstrap Notify 3.1.3 -->
-		<script type="text/javascript" src="javascripts/bootstrap-notify.js"></script>
+		<!-- Notiflix -->
+		<script type="text/javascript" src="javascripts/notiflix-aio-2.7.0.min.js"></script>
 
+		<!-- Custom -->
 		<script type="text/javascript" src="javascripts/common.js"></script>
-		<script type="module" src="javascripts/tabs/page-adder.js"></script>
-		<script type="module" src="javascripts/tabs/model-adder.js"></script>
-		<script type="module" src="javascripts/tabs/database.js"></script>
+		
+		<!-- Modules -->
 		<script type="module" src="javascripts/views/language-chooser.js"></script>
-		<script type="module" src="javascripts/tabs/framework-libs.js"></script>
 		<script type="module" src="javascripts/views/index.js"></script>
+		
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<h5 style="text-transform: uppercase;">MVC Generator</h5>
 				</div>
-				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pb-3" style="
+			</div>
+			<div class="row pb-3" style="
 					border: 1px solid #cdccc9;
 					border-radius: 5px;
 				">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<div class="languages">
 						<div id="php" class="language mdb-tooltip" value="1" data-mdb-toggle="tooltip" data-mdb-placement="top" title="PHP" checked>
 							<i class="fab fa-php"></i>
-							<span>PHP</span>
+							<span>PHP (Website)</span>
 						</div>
 						<div id="java" class="language mdb-tooltip" value="2" data-mdb-toggle="tooltip" data-mdb-placement="top" title="Java">
 							<i class="fab fa-java"></i>
@@ -56,8 +60,14 @@
 						</div>
 						<div id="android" class="language mdb-tooltip" value="3" data-mdb-toggle="tooltip" data-mdb-placement="top" title="Android">
 							<i class="fab fa-android"></i>
-							<span>Android</span>
+							<span>Android (Kotlin)</span>
 						</div>
+					</div>
+				</div>
+				<div id="website-keywords-container" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<div class="form-outline mt-3">
+						<textarea name="website-keywords" class="form-control" id="website-keywords" rows="2"></textarea>
+						<label class="form-label" for="website-keywords">Palavras-chave do site (Separado por vírgula)</label>
 					</div>
 				</div>
 			</div>
@@ -74,11 +84,14 @@
 							<li class="nav-item">
 								<a class="nav-link" id="models-tab" data-mdb-toggle="tab" href="#models" role="tab" aria-controls="models" aria-selected="false">Classes (Models)</a>
 							</li>
-							<li class="nav-item">
+							<li id="nav-pages" class="nav-item">
 								<a class="nav-link" id="pages-tab" data-mdb-toggle="tab" href="#pages" role="tab" aria-controls="pages" aria-selected="false">Páginas</a>
 							</li>
-							<li class="nav-item">
-								<a class="nav-link" id="frameworks-libs-tab" data-mdb-toggle="tab" href="#frameworks-libs" role="tab" aria-controls="frameworks-libs" aria-selected="false">Frameworks e Bibliotecas</a>
+							<li id="nav-frameworks" class="nav-item">
+								<a class="nav-link" id="frameworks-tab" data-mdb-toggle="tab" href="#frameworks" role="tab" aria-controls="frameworks" aria-selected="false">Frameworks</a>
+							</li>
+							<li id="nav-libs" class="nav-item d-none">
+								<a class="nav-link" id="libs-tab" data-mdb-toggle="tab" href="#libs" role="tab" aria-controls="libs" aria-selected="false">Bibliotecas</a>
 							</li>
 						</ul>
 					</header>
@@ -95,9 +108,13 @@
 							<%- include loading.ejs %>
 							<%- include tabs/pages.ejs %>
 						</div>
-						<div class="tab-pane fade" id="frameworks-libs" role="tabpanel" aria-labelledby="frameworks-libs-tab">
+						<div class="tab-pane fade" id="frameworks" role="tabpanel" aria-labelledby="frameworks-tab">
 							<%- include loading.ejs %>
-							<%- include tabs/frameworks-libs.ejs %>
+							<%- include tabs/frameworks.ejs %>
+						</div>
+						<div class="tab-pane fade d-none" id="libs" role="tabpanel" aria-labelledby="libs-tab">
+							<%- include loading.ejs %>
+							<%- include tabs/libs.ejs %>
 						</div>
 					</div>
 				</div>

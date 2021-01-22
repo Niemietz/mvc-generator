@@ -7,7 +7,7 @@
 {
     cursor: pointer;
     height:50px;
-    width:50px;
+    width:122px;
     line-height: 7;
     text-align: center;
     display:inline-grid;
@@ -44,31 +44,31 @@
 .language[checked="true"] i
 {
     font-size: 2.7em;
-    color: darksalmon;
+    color: #1266f1;
 }
 
 .language[checked="checked"] i
 {
     font-size: 2.7em;
-    color: darksalmon;
+    color: #1266f1;
 }
 
 .language[checked] i
 {
     font-size: 2.7em;
-    color: darksalmon;
+    color: #1266f1;
 }
 
 .language[checked="true"] span
 {
     font-weight: bold;
-    color: darksalmon;
+    color: #1266f1;
 }
 
 .language[checked="checked"] span
 {
     font-weight: bold;
-    color: darksalmon;
+    color: #1266f1;
     /* First we need to help some browsers along for this to work.
         Just because a vendor prefix is there, doesn't mean it will
         work in a browser made by that vendor either, it's just for
@@ -84,7 +84,7 @@
 .language[checked] span
 {
     font-weight: bold;
-    color: darksalmon;
+    color: #1266f1;
     /* First we need to help some browsers along for this to work.
         Just because a vendor prefix is there, doesn't mean it will
         work in a browser made by that vendor either, it's just for
