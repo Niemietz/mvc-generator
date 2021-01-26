@@ -35,6 +35,8 @@
 		<script type="text/javascript" src="javascripts/common.js"></script>
 		
 		<!-- Modules -->
+		<script type="module" src="javascripts/files/php/app/controller/ControllerAPI.js"></script>
+		<script type="module" src="javascripts/files/php/app/data/DAO.js"></script>
 		<script type="module" src="javascripts/views/language-chooser.js"></script>
 		<script type="module" src="javascripts/views/index.js"></script>
 		
@@ -64,10 +66,16 @@
 						</div>
 					</div>
 				</div>
-				<div id="website-keywords-container" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div id="website-keywords-container" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
 					<div class="form-outline mt-3">
 						<textarea name="website-keywords" class="form-control" id="website-keywords" rows="2"></textarea>
 						<label class="form-label" for="website-keywords">Palavras-chave do site (Separado por vírgula)</label>
+					</div>
+				</div>
+				<div id="404-keywords-container" class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+					<div class="form-outline mt-3">
+						<textarea name="404-keywords" class="form-control" id="404-keywords" rows="2"></textarea>
+						<label class="form-label" for="404-keywords">Palavras-chave da página não encontrada (Separado por vírgula)</label>
 					</div>
 				</div>
 			</div>
@@ -123,6 +131,14 @@
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 					<!--<a id="back" class="btn peach-gradient btn-rounded waves-effect">Voltar</a>-->
 					<a id="generate-files" class="btn btn-secondary btn-rounded waves-effect">Gerar arquivos</a>
+				</div>
+			</div>
+			<div class="row mt-3">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					<div class="form-outline">
+						<textarea name="debug" class="form-control" id="debug" rows="15"></textarea>
+						<label class="form-label" for="debug">Debug</label>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -197,6 +197,10 @@ String.prototype.leftTrim = function() {
     return this.replace(/^\s+/,"");
 }
 
+String.prototype.hasSpace = function() {
+    return (/\s/.test(this))
+}
+
 String.prototype.spaceStringOnly = function() {
     let result = false
     if (!this.replace(/\s/g, '').length) {
@@ -251,4 +255,19 @@ HTMLElement.prototype.submitLikeInputPress = function() {
     submit.click()
 
     submit.remove()
+}
+
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
+
+// TRANSFORMA A STRING (APENAS A PRIMEIRA LETRA MAIÚSCULA)
+String.prototype.capitaliseFirstLetter = function() {
+    try {
+        return this.toLowerCase().replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g, function(replace_latter) {
+            return replace_latter.toUpperCase();
+        }); //Can use also /\b[a-z]/g
+    } catch (ex) {
+        throw "Could not capitalize first letter of string \"" + this + "\"!\n\n" + ex;
+    }
 }

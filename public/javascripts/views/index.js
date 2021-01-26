@@ -1,10 +1,16 @@
 import { getLanguage } from '/javascripts/views/language-chooser.js';
 import { setOnLanguageChooseFromIndex } from '/javascripts/views/language-chooser.js';
+import getControllerAPIText from '/javascripts/files/php/app/controller/ControllerAPI.js';
+import getModelsText from '/javascripts/files/php/app/model/Models.js';
+import getModelText from '/javascripts/files/php/app/model/Model.js';
+import getDAOText from '/javascripts/files/php/app/data/DAO.js';
 import { setAfterDatabaseFormValidation, getDatabase, getDatabaseForm } from '/javascripts/tabs/database.js';
 import getFramework from '/javascripts/tabs/framework.js';
 import getLibsVersions from '/javascripts/tabs/libs.js';
 import getModels from '/javascripts/tabs/model-adder.js';
 import { getPages } from '/javascripts/tabs/page-adder.js';
+
+const inpDebugId = "debug";
 
 const btnNavLinkClass = "nav-link";
 const divNavLinkPagesId = "nav-pages";
@@ -20,6 +26,8 @@ const txtLoadingClass = "loading-text";
 const btnGenerateFilesId = "generate-files";
 const inpWebsiteKeywordsId = "website-keywords";
 const divWebsiteKeywordsId = "website-keywords-container";
+const inp404KeywordsId = "404-keywords";
+const div404KeywordsId = "404-keywords-container";
 
 export function showMessage(message, type = null, log = true)
 {
@@ -87,6 +95,7 @@ function setPageStatus(status, loadingText = "Carregando...")
 }
 
 const generatorData = {
+    "keywords404": [],
     "keywords": [],
     "database": null,
     "language": null,
@@ -97,6 +106,7 @@ const generatorData = {
 }
 
 function getGeneratorData() {
+    generatorData.keywords404 = document.getElementById(inp404KeywordsId).value.splitAndTrim()
     generatorData.keywords = document.getElementById(inpWebsiteKeywordsId).value.splitAndTrim()
     generatorData.database = getDatabase()
     generatorData.language = getLanguage()
@@ -131,6 +141,7 @@ $(document).ready(function(e)
     setOnLanguageChooseFromIndex(function(language) {
         if (language.value == 1) {
             document.getElementById(divWebsiteKeywordsId).classList.remove("d-none")
+            document.getElementById(div404KeywordsId).classList.remove("d-none")
             document.getElementById(divNavLinkPagesId).classList.remove("d-none")
             document.getElementById(divTabPagesId).classList.remove("d-none")
 
@@ -141,6 +152,7 @@ $(document).ready(function(e)
             document.getElementById(divTabLibsId).classList.add("d-none")
         } else {
             document.getElementById(divWebsiteKeywordsId).classList.add("d-none")
+            document.getElementById(div404KeywordsId).classList.add("d-none")
             document.getElementById(divNavLinkPagesId).classList.add("d-none")
             document.getElementById(divTabPagesId).classList.add("d-none")
 
@@ -175,15 +187,24 @@ $(document).ready(function(e)
         setAfterDatabaseFormValidation(function(event, validate) {
             if (validate) {
                 console.log("Generating File...", getGeneratorData());
+
+                document.getElementById(inpDebugId).classList.add("active")
+
+                document.getElementById(inpDebugId).innerHTML = getModelsText(getModels()[0])    
             }
         })
         document.getElementById(aDatabaseId).click()
         setTimeout(function() {
             const databaseForm = getDatabaseForm()
             databaseForm.submitLikeInputPress()
+
             this.clearTimeout()
         }, 155)
     });
+
+    document.getElementById(inp404KeywordsId).oninput = function(ev) {
+        generatorData.keywords404 = ev.target.value.splitAndTrim()
+    };
 
     document.getElementById(inpWebsiteKeywordsId).oninput = function(ev) {
         generatorData.keywords = ev.target.value.splitAndTrim()

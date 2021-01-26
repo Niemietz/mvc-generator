@@ -13,7 +13,9 @@ const divNoModelId = "no-model-warning";
 const inpAddModelName = "name";
 const inpAddModelNameId = "model-name";
 const inpAddModelAttribute = "attribute";
+const inpAddModelAttributeColumnName = "attribute-column-name";
 const inpAddModelColumnName = "column-name";
+const inpAddModelColumnNameId = "column-name";
 const selAttributeTypeId = "attribute-type";
 const selAttributeTypeName = "attribute-type";
 const inpAddModelHasListName = "has-list";
@@ -55,7 +57,7 @@ function addNewModelAttributeLine(attribute, columnName, type) {
     
     const newModelColumnNameInput = document.createElement("input");
     newModelColumnNameInput.id = generateUid();
-    newModelColumnNameInput.setAttribute("name", inpAddModelColumnName);
+    newModelColumnNameInput.setAttribute("name", inpAddModelAttributeColumnName);
     newModelColumnNameInput.setAttribute("type", "text");
     newModelColumnNameInput.setAttribute("placeholder", "atributo");
     newModelColumnNameInput.classList.add("form-control")
@@ -158,6 +160,8 @@ function fillAddModelModal(data) {
     $(`#${tblModelBodyTableId}`).empty()
 
     document.getElementById(frmAddModelFormId)[inpAddModelName].value = data["name"]
+
+    document.getElementById(frmAddModelFormId)[inpAddModelColumnName].value = data["columnName"]
 
     for (let i = 0; i < data["attributesAndColumnNames"].length; i++) {
         const attribute = data["attributesAndColumnNames"][i]["attribute"]
@@ -265,6 +269,15 @@ $(document).ready(function()
         }
     }
 
+    document.getElementById(inpAddModelColumnNameId).onfocus = function(event) {
+        if(event.relatedTarget.id == btnAddModelId) {
+            const validate = this.checkValidity()
+            if (!validate) {
+                showMessage("Verifique os campos não preenchidos!", 2)
+            }
+        }
+    }
+
     addNewModelAttributeLine()
 
     const addModelForm = document.getElementById(frmAddModelFormId)
@@ -329,18 +342,39 @@ $(document).ready(function()
     $(`#${btnAddModelId}`).click(function(e)
     {
         afterFormValidation = function (event, validate) {
-            if (validate) {
-                const newModelData = $(`#${frmAddModelFormId}`).serializeFormJSON(false);
+            const newModelData = $(`#${frmAddModelFormId}`).serializeFormJSON(false);
 
+            if (newModelData[inpAddModelName].hasSpace()) {
+                showMessage(`O nome "${newModelData[inpAddModelName]}" não pode conter espaços!`, 3)
+                validate = false;
+            }
+            if (newModelData[inpAddModelColumnName].hasSpace()) {
+                showMessage(`O nome da coluna "${newModelData[inpAddModelName]}" não pode conter espaços!`, 3)
+                validate = false;
+            }
+            for(let i = 0; i < newModelData[inpAddModelAttribute].length; i++) {
+                if (newModelData[inpAddModelAttribute][i].hasSpace()) {
+                    showMessage(`O atributo "${newModelData[inpAddModelAttribute][i]}" não pode conter espaços!`, 3)
+                    validate = false;
+                    break;
+                }
+                if (newModelData[inpAddModelAttributeColumnName][i].hasSpace()) {
+                    showMessage(`O nome da coluna "${newModelData[inpAddModelAttributeColumnName]}" não pode conter espaços!`, 3)
+                    validate = false;
+                    break;
+                }
+            }
+
+            if (validate) {
                 if (!Array.isArray(newModelData[inpAddModelAttribute])) {
                     newModelData[inpAddModelAttribute] = [
                         newModelData[inpAddModelAttribute]
                     ]
                 }
 
-                if (!Array.isArray(newModelData[inpAddModelColumnName])) {
-                        newModelData[inpAddModelColumnName] = [
-                            newModelData[inpAddModelColumnName]
+                if (!Array.isArray(newModelData[inpAddModelAttributeColumnName])) {
+                        newModelData[inpAddModelAttributeColumnName] = [
+                            newModelData[inpAddModelAttributeColumnName]
                         ]
                 }
 
@@ -383,13 +417,15 @@ $(document).ready(function()
                 if (currentEditModel != null) {
                     currentEditModel.name = newModelData[inpAddModelName]
 
+                    currentEditModel.columnName = newModelData[inpAddModelColumnName]
+
                     const typeText = document.getElementById(selAttributeTypeId).querySelector('option[selected="true"]').innerHTML
 
                     currentEditModel.attributesAndColumnNames = []
                     for(let i = 0; i < newModelData[inpAddModelAttribute].length; i++) {
                         currentEditModel.attributesAndColumnNames.push({
                             "attribute": newModelData[inpAddModelAttribute][i],
-                            "columnName": newModelData[inpAddModelColumnName][i],
+                            "columnName": newModelData[inpAddModelAttributeColumnName][i],
                             "type": {
                                 "id": parseInt(newModelData[selAttributeTypeName][i]),
                                 "text": typeText
@@ -456,11 +492,13 @@ $(document).ready(function()
 
                     newModel.name = newModelData[inpAddModelName]
 
+                    newModel.columnName = newModelData[inpAddModelColumnName]
+
                     newModel.attributesAndColumnNames = []
                     for(let i = 0; i < newModelData[inpAddModelAttribute].length; i ++) {
                         newModel.attributesAndColumnNames.push({
                             "attribute": newModelData[inpAddModelAttribute][i],
-                            "columnName": newModelData[inpAddModelColumnName][i],
+                            "columnName": newModelData[inpAddModelAttributeColumnName][i],
                             "type": {
                                 "id": parseInt(newModelData[selAttributeTypeName][i]),
                                 "text": typeText

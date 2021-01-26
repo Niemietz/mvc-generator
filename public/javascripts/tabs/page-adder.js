@@ -182,9 +182,19 @@ $(document).ready(function()
     $(`#${btnAddPageId}`).click(function(e)
     {
         afterPageFormValidation = function (event, validate) {
-            if (validate) {
-                const newPageData = $(`#${frmAddPageFormId}`).serializeFormJSON(false);
 
+            const newPageData = $(`#${frmAddPageFormId}`).serializeFormJSON(false);
+
+            if (newPageData[inpAddPageNameId].hasSpace()) {
+                showMessage(`O nome "${newPageData[inpAddPageNameId]}" não pode conter espaços!`, 3)
+                validate = false;
+            }
+            if (newPageData[inpAddPageRouteName].hasSpace()) {
+                showMessage(`A rota "${newPageData[inpAddPageRouteName]}" não pode conter espaços!`, 3)
+                validate = false;
+            }
+
+            if (validate) {
                 if (currentEditPage != null) {
                     currentEditPage.name = newPageData[inpAddPageNameId]
 
