@@ -1,10 +1,10 @@
-export default function(loadingText, loadingClass, contentClass, loadingModelClass, loadingModelClass) {
+export default function(loadingText, loadingTextClass, loadingClass, contentClass, loadingModalClass, contentModalClass) {
     let result =
-`const loadingTextClass = "${loadingText}";
+`const loadingTextClass = "${loadingTextClass}";
 const loadingClass = "${loadingClass}";
 const contentClass = "${contentClass}";
-const loadingModalClass = "${loadingModelClass}";
-const contentModalClass = "${loadingModelClass}";
+const loadingModalClass = "${loadingModalClass}";
+const contentModalClass = "${contentModalClass}";
 
 /**
  * It shows an small alert to the user, using Notiflix
@@ -137,17 +137,21 @@ function showMessage(message, type = 4, useAlert = false)
     }
     else
     {
+        let titleStr = 'Aviso';
         let typeStr = 'info';
         if(type == 1)
         {
+            titleStr = 'Concluído';
             typeStr = 'success';
         }
         else if(type == 2)
         {
+            titleStr = 'Oops';
             typeStr = 'error';
         }
         else if(type == 3)
         {
+            titleStr = 'Atenção';
             typeStr = 'warning';
         }
         else if(type == 5)
@@ -157,7 +161,8 @@ function showMessage(message, type = 4, useAlert = false)
     
         Swal.fire({
             "type": typeStr,
-            html: text.replaceAll("\n", "<br>"),
+            title: titleStr,
+            "text": text,
             showCloseButton: true,
             showConfirmButton: false
         });
@@ -173,19 +178,19 @@ function setLoading(status)
 {
     if(status)
     {
-        document.querySelectorAll(\`.${loadingClass}\`).forEach(function (loadingElem) {
+        document.querySelectorAll(\`.\${loadingClass}\`).forEach(function (loadingElem) {
             loadingElem.style.removeProperty("display");
         });
-        document.querySelectorAll(\`.${contentClass}\`).forEach(function (contentElem) {
+        document.querySelectorAll(\`.\${contentClass}\`).forEach(function (contentElem) {
             contentElem.style.display = "none";
         });
     }
     else
     {
-        document.querySelectorAll(\`.${loadingClass}\`).forEach(function (loadingElem) {
+        document.querySelectorAll(\`.\${loadingClass}\`).forEach(function (loadingElem) {
             loadingElem.style.display = "none";
         });
-        document.querySelectorAll(\`.${contentClass}\`).forEach(function (contentElem) {
+        document.querySelectorAll(\`.\${contentClass}\`).forEach(function (contentElem) {
             contentElem.style.removeProperty("display");
         });
     }
@@ -249,10 +254,10 @@ function setLoadingModal(status, modal = null)
             modal.find(".confirmacao-excluir").addClass("d-none");
         }
 
-        document.querySelectorAll(\`.${loadingModalClass}\`).forEach(function (loadingElem) {
+        document.querySelectorAll(\`.\${loadingModalClass}\`).forEach(function (loadingElem) {
             loadingElem.style.removeProperty("display");
         });
-        document.querySelectorAll(\`.${contentModalClass}\`).forEach(function (contentElem) {
+        document.querySelectorAll(\`.\${contentModalClass}\`).forEach(function (contentElem) {
             contentElem.style.display = "none";
         });
     }
@@ -266,10 +271,10 @@ function setLoadingModal(status, modal = null)
             modal.find(".confirmacao-excluir").addClass("d-none");
         }
 
-        document.querySelectorAll(\`.${loadingClass}\`).forEach(function (loadingElem) {
+        document.querySelectorAll(\`.\${loadingClass}\`).forEach(function (loadingElem) {
             loadingElem.style.display = "none";
         });
-        document.querySelectorAll(\`.${contentClass}\`).forEach(function (contentElem) {
+        document.querySelectorAll(\`.\${contentClass}\`).forEach(function (contentElem) {
             contentElem.style.removeProperty("display");
         });
     }
@@ -280,9 +285,9 @@ function setLoadingModal(status, modal = null)
  *
  * @param {String} text - Text to be set at the loading view
  */
-function setLoadingText(text)
+function setLoadingText(text = "${loadingText}")
 {
-    document.querySelectorAll(\`.${loadingTextClass}\`).forEach(function (loadingElem) {
+    document.querySelectorAll(\`.\${loadingTextClass}\`).forEach(function (loadingElem) {
         loadingElem.innerHTML = text;
     });
 }
@@ -292,12 +297,21 @@ function setLoadingText(text)
  */
 function resetLoadingText()
 {
-    document.querySelectorAll(\`.${loadingTextClass}\`).forEach(function (loadingElem) {
-        loadingElem.innerHTML = "Loading...";
+    document.querySelectorAll(\`.\${loadingTextClass}\`).forEach(function (loadingElem) {
+        loadingElem.innerHTML = "${loadingText}";
     });
 }
 
 document.addEventListener(contentLoadedEventListener, (event) => {
+    Notiflix.Notify.Init({
+        failure: {
+            textColor:"#000"
+        },
+        warning: {
+            textColor:"#000"
+        }
+    });
+    
     setLoading(false);
     // setLoadingModal(false); // TODO - Needs some review
 });`

@@ -167,6 +167,33 @@
     };
 })(jQuery);
 
+/**
+ * It sends JSON data to Ajax Request
+ * 
+ * @param {Object} obj - Ajax request data
+ */
+function jsonAjax(obj = { url: "", type: "POST", data: {} }) {
+    obj["accepts"] = {
+        jsonJson: 'application/json-json'
+    };
+    obj["converters"] = {
+        'json jsonJson': function(response)
+        {
+            if(response.error == null && response.result != null)
+            {
+                response.result = parseJSON(response.result);
+            }
+
+            return response;
+        }
+    };
+    obj["dataType"] = 'jsonJson';
+
+    obj.data = JSON.stringify(obj.data)
+
+    $.ajax(obj);
+}
+
 function generateUid() {
     var lut = []; for (var i=0; i<256; i++) { lut[i] = (i<16?'0':'')+(i).toString(16); }
 
@@ -191,6 +218,22 @@ function createFileInstance(filename, content, mimetype = "text/plain")
             type: mimetype // optional - default = ''
         }
     );
+}
+
+function downloadFileFromBlob(filename, blob, mimetype = "text/plain") {
+	let url = window.URL.createObjectURL(blob);
+    
+    let link = document.createElement("a");
+    link.download = filename;
+    link.href = url;
+    link.click();
+
+	window.URL.revokeObjectURL(url);
+}
+
+function downloadFile(filename, content, mimetype = "text/plain") {
+	let blob = new Blob([content], {mimetype});
+	downloadFileFromBlob(filename, blob, mimetype)
 }
 
 String.prototype.leftTrim = function() {

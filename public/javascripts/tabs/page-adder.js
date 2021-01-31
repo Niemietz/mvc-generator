@@ -26,9 +26,11 @@ const rdPageListWithInsertEditId = "list-with-insert-edit";
 const rdPageListWithInsertRemoveId = "list-with-insert-remove";
 const rdPageListWithEditRemoveId = "list-with-edit-remove";
 const rdPageListWithInsertEditRemoveId = "list-with-insert-edit-remove";
-const listWithItemIds = [
+const insertEditFormWithItemIds = [
     rdPageInsertFormId,
-    rdPageInsertEditFormId,
+    rdPageInsertEditFormId
+]
+const listWithItemIds = [
     rdPageListWithInsertId,
     rdPageListWithEditId,
     rdPageListWithRemoveId,
@@ -54,7 +56,7 @@ function fillAddPageModal(data) {
     const typeCheckbox = document.getElementById(frmAddPageFormId).querySelector(`input[value="${data["type"]["id"]}"]`)
     typeCheckbox.click()
 
-    if (listWithItemIds.includes(typeCheckbox.id)) {
+    if (listWithItemIds.includes(typeCheckbox.id) || insertEditFormWithItemIds.includes(typeCheckbox.id)) {
         if (data["item"]["id"] != null) {
             document.querySelector(`input[id="${data["item"]["id"]}"]`).click()
         }
@@ -121,7 +123,7 @@ $(document).ready(function()
 
     document.getElementsByName(rdPageTypeName).forEach((radio) => {
         radio.onclick = function(ev) {
-            if (listWithItemIds.includes(this.id)) {
+            if (listWithItemIds.includes(this.id) || insertEditFormWithItemIds.includes(this.id)) {
                 document.getElementById(inpAddPageModelsTableId).classList.remove("d-none")
             } else {
                 document.getElementById(inpAddPageModelsTableId).classList.add("d-none")
@@ -136,12 +138,22 @@ $(document).ready(function()
     })
 
     $(`#${mdlAddPageModalId}`).on('show.bs.modal', function (e) {
+        document.getElementById(inpAddPageModelsTableId).querySelectorAll("div").forEach((childNode) => {
+            childNode.remove()
+        })
+
         const models = getModels()
 
         document.getElementsByName(rdPageTypeName).forEach((radio) => {
-            if (listWithItemIds.includes(radio.id) && models.length > 0) {
+            if (listWithItemIds.includes(radio.id)
+            && models.find(obj => obj.hasList == true) != null) {
                 radio.removeAttribute("disabled")
-            } else if (listWithItemIds.includes(radio.id) && models.length == 0) {
+            } else if (listWithItemIds.includes(radio.id)) {
+                radio.setAttribute("disabled", true)
+            } else if (insertEditFormWithItemIds.includes(radio.id)
+            && models.length > 0) {
+                radio.removeAttribute("disabled")
+            } else if (insertEditFormWithItemIds.includes(radio.id)) {
                 radio.setAttribute("disabled", true)
             }
         })
@@ -217,14 +229,21 @@ $(document).ready(function()
                         "text": type
                     }
 
-                    if (listWithItemIds.includes(document.querySelector(`input[name="${rdPageTypeName}"]:checked`).id)) {
+                    if (listWithItemIds.includes(document.querySelector(`input[name="${rdPageTypeName}"]:checked`).id)
+                    || insertEditFormWithItemIds.includes(document.querySelector(`input[name="${rdPageTypeName}"]:checked`).id)) {
                         const checkedPageModel = document.querySelector(`input[name="${rdPageModelName}"]:checked`)
                         const item = checkedPageModel.parentNode.querySelector("label").innerHTML
                         tableLine.childNodes[5].innerHTML = `${type} (${item})`
-                        currentEditPage.item = { "model": item, "id": checkedPageModel.id }
+                        const models = getModels()
+                        const model = models.find(obj => obj.id == checkedPageModel.id)
+                        if (model != null) {
+                            currentEditPage.item = model
+                        } else {
+                            currentEditPage.item = null
+                        }
                     } else {
                         tableLine.childNodes[5].innerHTML = `${type}`
-                        currentEditPage.item = { "model": null, "id": null }
+                        currentEditPage.item = null
                     }
 
                     tableLine.childNodes[1].innerHTML = currentEditPage.name
@@ -264,14 +283,21 @@ $(document).ready(function()
                     newPageCol5.innerHTML = document.querySelector(`input[name="${rdPageTypeName}"]:checked`).parentNode
                         .querySelector("label").innerHTML;
 
-                    if (listWithItemIds.includes(document.querySelector(`input[name="${rdPageTypeName}"]:checked`).id)) {
+                    if (listWithItemIds.includes(document.querySelector(`input[name="${rdPageTypeName}"]:checked`).id)
+                    || insertEditFormWithItemIds.includes(document.querySelector(`input[name="${rdPageTypeName}"]:checked`).id)) {
                         const checkedPageModel = document.querySelector(`input[name="${rdPageModelName}"]:checked`)
                         const item = checkedPageModel.parentNode
                         .querySelector("label").innerHTML
                         newPageCol5.innerHTML += ` (${item})`
-                        newPage.item = { "model": item, "id": checkedPageModel.id }
+                        const models = getModels()
+                        const model = models.find(obj => obj.id == checkedPageModel.id)
+                        if (model != null) {
+                            newPage.item = model
+                        } else {
+                            newPage.item = null
+                        }
                     } else {
-                        newPage.item = { "model": null, "id": null }
+                        newPage.item = null
                     }
 
                     newPage.type = {
@@ -339,9 +365,7 @@ $(document).ready(function()
     });
 });
 
-export function removePageFromModelId(modelId) {
-    const pagesTableBody = document.getElementById(tblPagesBodyTableId)
-
+export function removePageFromModelId(modelId, modelName) {
     const page = pages.find(page => page.item.id == modelId);
     if (page != null) {
         const pageToRemoveIndex = pages.indexOf(page)
@@ -350,11 +374,13 @@ export function removePageFromModelId(modelId) {
             showNoPageWarning(true);
         }
 
+        const pagesTableBody = document.getElementById(tblPagesBodyTableId)
+
         pagesTableBody.childNodes.forEach((tr) => {
             if (tr.id == page.id) {
                 tr.remove()
             }
-        })
+        })    
     }
 }
 

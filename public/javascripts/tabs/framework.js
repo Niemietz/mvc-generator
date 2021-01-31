@@ -1,6 +1,7 @@
 const radFrameworksName = "frameworks"
+const chkUseCDNId = "use-cdn"
 
-const framework = { "id": 1, "framework": "Bootstrap" }
+const framework = { "id": 1, "framework": "Bootstrap", "useCDN": false }
 
 $(document).ready(function()
 {
@@ -11,6 +12,16 @@ $(document).ready(function()
             framework.framework = selectedFrameworkLabel.innerHTML
         }
     })
+
+    document.getElementById(chkUseCDNId).onchange = function(evt) {
+        if (this.checked) {
+            framework.useCDN = true
+            this.value = "1"
+        } else {
+            framework.useCDN = false
+            this.value = "0"
+        }
+    }
 });
 
 export default function() {

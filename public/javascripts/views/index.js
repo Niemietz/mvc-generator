@@ -1,9 +1,22 @@
 import { getLanguage } from '/javascripts/views/language-chooser.js';
 import { setOnLanguageChooseFromIndex } from '/javascripts/views/language-chooser.js';
-import getControllerAPIText from '/javascripts/files/php/app/controller/ControllerAPI.js';
+
+// Models
 import getModelsText from '/javascripts/files/php/app/model/Models.js';
 import getModelText from '/javascripts/files/php/app/model/Model.js';
+
+// Data
 import getDAOText from '/javascripts/files/php/app/data/DAO.js';
+
+// Javascripts
+import getMainJSText from '/javascripts/files/php/public/js/view/main.js';
+import getAPIJSText from '/javascripts/files/php/public/js/api.js';
+import getIndexJSText from '/javascripts/files/php/public/js/index.js';
+
+// Classes
+import getRenderText from '/javascripts/files/php/src/classes/Render.js';
+import getRoutesText from '/javascripts/files/php/src/classes/Routes.js';
+
 import { setAfterDatabaseFormValidation, getDatabase, getDatabaseForm } from '/javascripts/tabs/database.js';
 import getFramework from '/javascripts/tabs/framework.js';
 import getLibsVersions from '/javascripts/tabs/libs.js';
@@ -23,11 +36,24 @@ const divTabLibsId = "libs";
 const divContentClass = "content";
 const divLoadingClass = "loading";
 const txtLoadingClass = "loading-text";
-const btnGenerateFilesId = "generate-files";
+const divWebsiteGeneralId = "website-general-container";
+const frmWebsiteFormId = "website-form";
+const inpWebsiteTitleId = "website-title";
 const inpWebsiteKeywordsId = "website-keywords";
-const divWebsiteKeywordsId = "website-keywords-container";
 const inp404KeywordsId = "404-keywords";
+const inpWebsiteTitleName = "website-title";
+const inpWebsiteAuthorName = "website-author";
+const inpWebsiteDescriptionName = "website-description";
+const inpWebsiteKeywordsName = "website-keywords";
+const inpLoadingTextName = "loading-text";
+const inpLoadingClassName = "loading-class";
+const inpLoadingTextClassName = "loading-text-class";
+const inpLoadingModalClassName = "loading-modal-class";
+const inpContentClassName = "content-class";
+const inpContentModalClassName = "content-modal-class";
+const inp404KeywordsName = "404-keywords";
 const div404KeywordsId = "404-keywords-container";
+const btnGenerateFilesId = "generate-files";
 
 export function showMessage(message, type = null, log = true)
 {
@@ -94,9 +120,20 @@ function setPageStatus(status, loadingText = "Carregando...")
     }
 }
 
+let afterGeneralFormValidation = null;
+
 const generatorData = {
+    "title": "",
+    "author": "",
+    "description": "",
     "keywords404": [],
     "keywords": [],
+    "loadingText": "Loading...",
+    "loadingTextClass": "loading-text",
+    "loadingClass": "loading",
+    "loadingModalClass": "loading-modal",
+    "contentClass": "content",
+    "contentModalClass": "content-modal",
     "database": null,
     "language": null,
     "framework": null,
@@ -106,8 +143,21 @@ const generatorData = {
 }
 
 function getGeneratorData() {
-    generatorData.keywords404 = document.getElementById(inp404KeywordsId).value.splitAndTrim()
-    generatorData.keywords = document.getElementById(inpWebsiteKeywordsId).value.splitAndTrim()
+    const formData = $(`#${frmWebsiteFormId}`).serializeFormJSON()
+
+    generatorData.title = formData[inpWebsiteTitleName]
+    generatorData.author = formData[inpWebsiteAuthorName]
+    generatorData.description = formData[inpWebsiteDescriptionName]
+    generatorData.keywords404 = formData[inp404KeywordsName].splitAndTrim()
+    generatorData.keywords = formData[inpWebsiteKeywordsName].splitAndTrim()
+
+    generatorData.loadingText = formData[inpLoadingTextName]
+    generatorData.loadingClass = formData[inpLoadingClassName]
+    generatorData.loadingTextClass = formData[inpLoadingTextClassName]
+    generatorData.loadingModalClass = formData[inpLoadingModalClassName]
+    generatorData.contentClass = formData[inpContentClassName]
+    generatorData.contentModalClass = formData[inpContentModalClassName]
+
     generatorData.database = getDatabase()
     generatorData.language = getLanguage()
     generatorData.models = getModels()
@@ -127,6 +177,11 @@ function getGeneratorData() {
     return generatorData
 }
 
+function debugText(innerHTML) {
+    document.getElementById(inpDebugId).classList.add("active")
+    document.getElementById(inpDebugId).innerHTML = innerHTML
+}
+
 $(document).ready(function(e)
 {
     Notiflix.Notify.Init({
@@ -138,9 +193,23 @@ $(document).ready(function(e)
         }
     });
 
+    // Fetch the form we want to apply custom Bootstrap validation styles to
+    const form = document.getElementById(frmWebsiteFormId);
+
+    // Validate and prevent form submission
+    form.onsubmit = function(event){
+        event.preventDefault();
+        event.stopPropagation();
+        const validate = form.checkValidity()
+        
+        if (afterGeneralFormValidation != null) {
+            afterGeneralFormValidation(event, validate)
+        }
+    };
+
     setOnLanguageChooseFromIndex(function(language) {
         if (language.value == 1) {
-            document.getElementById(divWebsiteKeywordsId).classList.remove("d-none")
+            document.getElementById(divWebsiteGeneralId).classList.remove("d-none")
             document.getElementById(div404KeywordsId).classList.remove("d-none")
             document.getElementById(divNavLinkPagesId).classList.remove("d-none")
             document.getElementById(divTabPagesId).classList.remove("d-none")
@@ -151,7 +220,7 @@ $(document).ready(function(e)
             document.getElementById(divNavLinkLibsId).classList.add("d-none")
             document.getElementById(divTabLibsId).classList.add("d-none")
         } else {
-            document.getElementById(divWebsiteKeywordsId).classList.add("d-none")
+            document.getElementById(divWebsiteGeneralId).classList.add("d-none")
             document.getElementById(div404KeywordsId).classList.add("d-none")
             document.getElementById(divNavLinkPagesId).classList.add("d-none")
             document.getElementById(divTabPagesId).classList.add("d-none")
@@ -182,26 +251,6 @@ $(document).ready(function(e)
         new mdb.Input(formOutline).init();
     });
 
-    $("#" + btnGenerateFilesId).unbind().click(function(e)
-    {
-        setAfterDatabaseFormValidation(function(event, validate) {
-            if (validate) {
-                console.log("Generating File...", getGeneratorData());
-
-                document.getElementById(inpDebugId).classList.add("active")
-
-                document.getElementById(inpDebugId).innerHTML = getModelsText(getModels()[0])    
-            }
-        })
-        document.getElementById(aDatabaseId).click()
-        setTimeout(function() {
-            const databaseForm = getDatabaseForm()
-            databaseForm.submitLikeInputPress()
-
-            this.clearTimeout()
-        }, 155)
-    });
-
     document.getElementById(inp404KeywordsId).oninput = function(ev) {
         generatorData.keywords404 = ev.target.value.splitAndTrim()
     };
@@ -209,6 +258,56 @@ $(document).ready(function(e)
     document.getElementById(inpWebsiteKeywordsId).oninput = function(ev) {
         generatorData.keywords = ev.target.value.splitAndTrim()
     };
+
+    document.getElementById(inpWebsiteTitleId).onfocus = function(event) {
+        if(event.relatedTarget != null) {
+            if(event.relatedTarget.id == btnGenerateFilesId) {
+                const validate = this.checkValidity()
+                if (!validate) {
+                    showMessage("Verifique os campos não preenchidos!", 2)
+                }
+            }
+        }
+    }
+
+    $("#" + btnGenerateFilesId).unbind().click(function(e)
+    {
+        afterGeneralFormValidation = function(event, validate) {
+            if (validate) {
+
+                setAfterDatabaseFormValidation(function(event, validate) {
+                    if (validate) {
+                        const data = getGeneratorData()
+                        console.log("Generating File...", data);
+
+                        jsonAjax({
+                            "url": "/zip/php",
+                            "type": "POST",
+                            "data": data,
+                            success: function(response) {
+                                console.log(response)
+                            },
+                            error: function(er) {
+                                console.error(er)
+                            }
+                        })
+                        
+                        debugText(getRenderText(data.pages))
+                    }
+                })
+
+                const databaseForm = getDatabaseForm()
+                databaseForm.submitLikeInputPress()
+            }
+        }
+        document.getElementById(aDatabaseId).click()
+        setTimeout(function() {
+            const form = document.getElementById(frmWebsiteFormId)
+            form.submitLikeInputPress()
+
+            this.clearTimeout()
+        }, 155)
+    });
 });
 
 export default { showMessage }

@@ -1,20 +1,20 @@
-export default function(model) {
+export default function(page) {
 `<?php
 
 namespace App\\Controller;
     
 use Src\\Classes\\Render;
     
-class Controller${model.name} extends Render
+class Controller${page.name} extends Render
 {
     public function __construct()
     {
         parent::__construct();
 
-        $this->setTitle("${model.name}");
-        $this->setDescription("${model.description}");
+        $this->setTitle("${page.name}");
+        $this->setDescription("${page.description}");
         $this->setKeywords(array(`
-    model.keywords.forEach((keyword, index) => {
+    page.keywords.forEach((keyword, index) => {
         if (index > 0) {
             result += `,
             `
@@ -24,7 +24,7 @@ class Controller${model.name} extends Render
 
     result += `
         ));
-        $this->setDirectory("${model.name}");
+        $this->setDirectory("${page.name}");
 
         $this->renderLayout();
     }

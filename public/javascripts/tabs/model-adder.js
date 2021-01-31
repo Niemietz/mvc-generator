@@ -419,16 +419,27 @@ $(document).ready(function()
 
                     currentEditModel.columnName = newModelData[inpAddModelColumnName]
 
-                    const typeText = document.getElementById(selAttributeTypeId).querySelector('option[selected="true"]').innerHTML
-
                     currentEditModel.attributesAndColumnNames = []
                     for(let i = 0; i < newModelData[inpAddModelAttribute].length; i++) {
+                        const type = parseInt(newModelData[selAttributeTypeName][i])
+                        let text = "Integer"
+                        if (type == 2) {
+                            text = "String"
+                        } else if (type == 3) {
+                            text = "Boolean"
+                        } else if (type == 4) {
+                            text = "Float"
+                        } else if (type == 5) {
+                            text = "Double"
+                        } else if (type == 6) {
+                            text = "Char"
+                        }
                         currentEditModel.attributesAndColumnNames.push({
                             "attribute": newModelData[inpAddModelAttribute][i],
                             "columnName": newModelData[inpAddModelAttributeColumnName][i],
                             "type": {
-                                "id": parseInt(newModelData[selAttributeTypeName][i]),
-                                "text": typeText
+                                "id": type,
+                                "text": text
                             }
                         })
                     }
@@ -444,7 +455,7 @@ $(document).ready(function()
                     currentEditModel.hasList = newModelData[inpAddModelHasListName]
 
                     const tableLine = document.getElementById(currentEditModel.id)
-                    tableLine.childNodes[1].innerHTML = `${currentEditModel.name} (${typeText})`
+                    tableLine.childNodes[1].innerHTML = currentEditModel.name
                     const selectCheck = tableLine.childNodes[2].querySelector(".select")
                     if (currentEditModel.select) {
                         selectCheck.setAttribute("checked", true)
@@ -485,10 +496,8 @@ $(document).ready(function()
                     const newModelLineHead = document.createElement("th");
                     newModelLineHead.setAttribute("scope", "row");
 
-                    const typeText = document.getElementById(selAttributeTypeId).querySelector('option[selected="true"]').innerHTML
-
                     const newModelCol1 = document.createElement("td");
-                    newModelCol1.innerHTML = `${newModelData[inpAddModelName]} (${typeText})`;
+                    newModelCol1.innerHTML = newModelData[inpAddModelName];
 
                     newModel.name = newModelData[inpAddModelName]
 
@@ -496,12 +505,25 @@ $(document).ready(function()
 
                     newModel.attributesAndColumnNames = []
                     for(let i = 0; i < newModelData[inpAddModelAttribute].length; i ++) {
+                        const type = parseInt(newModelData[selAttributeTypeName][i])
+                        let text = "Integer"
+                        if (type == 2) {
+                            text = "String"
+                        } else if (type == 3) {
+                            text = "Boolean"
+                        } else if (type == 4) {
+                            text = "Float"
+                        } else if (type == 5) {
+                            text = "Double"
+                        } else if (type == 6) {
+                            text = "Char"
+                        }
                         newModel.attributesAndColumnNames.push({
                             "attribute": newModelData[inpAddModelAttribute][i],
                             "columnName": newModelData[inpAddModelAttributeColumnName][i],
                             "type": {
-                                "id": parseInt(newModelData[selAttributeTypeName][i]),
-                                "text": typeText
+                                "id": type,
+                                "text": text
                             }
                         })
                     }
@@ -677,13 +699,22 @@ $(document).ready(function()
                     modelsTableBody.append(newModelLine)
 
                     newModelRemoveButton.onclick = () => {
-                        const modelToRemoveIndex = models.indexOf(newModel)
-                        models.splice(modelToRemoveIndex, 1);
-                        if (models.length == 0) {
-                            showNoModelWarning(true);
-                        }
-                        removePageFromModelId(newModel.id)
-                        newModelLine.remove();
+                        Notiflix.Confirm.Show(
+                            'Aviso',
+                            `Páginas associadas à classe (model) "${newModelData[inpAddModelName]}" também será removida.\n\nTem certeza que deseja continuar?`,
+                            'Sim',
+                            'Não',
+                            function() {
+                                const modelToRemoveIndex = models.indexOf(newModel)
+                                models.splice(modelToRemoveIndex, 1);
+                                if (models.length == 0) {
+                                    showNoModelWarning(true);
+                                }
+                                removePageFromModelId(newModel.id, newModelData[inpAddModelName])
+                                newModelLine.remove();
+                            },
+                            null
+                        );
                     }
 
                     showNoModelWarning(false);

@@ -1,4 +1,4 @@
-export default function(models) {
+exports.getControllerAPIText = function(models) {
     let result = 
 `<?php
 namespace App\\Controller;
