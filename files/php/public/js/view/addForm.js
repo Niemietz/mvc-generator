@@ -35,8 +35,8 @@ document.addEventListener(contentLoadedEventListener, (event) => {
             data,
             function() {
                 setLoading(true);
-            }, function(result) {
-                if (result) {
+            }, function(${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}Id) {
+                if (${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}Id > 0) {
                     showMessage("O/A ${page.item.name.capitaliseFirstLetter()} foi atualizado!", 1);
                 } else {
                     showMessage("Algo deu errado!", 2);

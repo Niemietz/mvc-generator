@@ -1,10 +1,10 @@
-exports.getAddModal = function(page) {
+exports.getAddEditModal = function(page) {
     let result =
-`<div id="mdl-add-${page.item.name.replaceAt(0, item.page.item.name.charAt(0).toLowerCase())}" class="modal fade" tabindex="-1" aria-labelledby="add-${page.item.name.replaceAt(0, item.page.item.name.charAt(0).toLowerCase())}-title" aria-hidden="true" >
+`<div id="mdl-add-edit-${page.item.name.replaceAt(0, item.page.item.name.charAt(0).toLowerCase())}" class="modal fade" tabindex="-1" aria-labelledby="add-edit-${page.item.name.replaceAt(0, item.page.item.name.charAt(0).toLowerCase())}-title" aria-hidden="true" >
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="add-${page.item.name.replaceAt(0, item.page.item.name.charAt(0).toLowerCase())}-title">Adicionar ${page.item.name.capitaliseFirstLetter()}</h5>
+                <h5 class="modal-title" id="add-edit-${page.item.name.replaceAt(0, item.page.item.name.charAt(0).toLowerCase())}-title">Adicionar ${page.item.name.capitaliseFirstLetter()}</h5>
                 <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
@@ -76,7 +76,7 @@ exports.getAddModal = function(page) {
                 <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">
                     Cancelar
                 </button>
-                <button id="add-${page.item.name.replaceAt(0, item.page.item.name.charAt(0).toLowerCase())}" type="button" class="btn btn-primary">Adicionar</button>
+                <button id="add-edit-${page.item.name.replaceAt(0, item.page.item.name.charAt(0).toLowerCase())}" type="button" class="btn btn-primary">Adicionar</button>
             </div>
         </div>
     </div>

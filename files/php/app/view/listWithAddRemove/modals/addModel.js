@@ -1,4 +1,4 @@
-exports.getAddModal = function(page) {
+exports.getAddRemoveModal = function(page) {
     let result =
 `<div id="mdl-add-${page.item.name.replaceAt(0, item.page.item.name.charAt(0).toLowerCase())}" class="modal fade" tabindex="-1" aria-labelledby="add-${page.item.name.replaceAt(0, item.page.item.name.charAt(0).toLowerCase())}-title" aria-hidden="true" >
     <div class="modal-dialog">

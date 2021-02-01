@@ -7,7 +7,7 @@ exports.getModelAddEditFormViewHeader = function(page) {
 ?>
 <div class="row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12 text-center text-dark">
-        <h1>Adicionar / Editar ${page.model.name.capitaliseFirstLetter()}</h1>
+        <h1>Adicionar / Editar ${page.item.name.capitaliseFirstLetter()}</h1>
     </div>
 </div>`
 }
