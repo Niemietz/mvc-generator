@@ -1,6 +1,6 @@
-exports.getSimpleJSText = function() {
+exports.getText = function() {
     let result =
-`document.addEventListener(contentLoadedEventListener, (event) => {
+`document.addEventListener(contentLoadedEventListener, function(event) {
     
 });`
 

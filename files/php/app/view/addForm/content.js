@@ -1,4 +1,18 @@
-exports.getModelAddFormViewContentText = function(page) {
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
+
+String.prototype.capitaliseFirstLetter = function() {
+    try {
+        return this.toLowerCase().replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g, function(replace_latter) {
+            return replace_latter.toUpperCase();
+        }); //Can use also /\b[a-z]/g
+    } catch (ex) {
+        throw "Could not capitalize first letter of string \"" + this + "\"!\n\n" + ex;
+    }
+}
+
+exports.getText = function(page) {
     let result =
 `<form id="form-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}">
 `
@@ -58,7 +72,7 @@ exports.getModelAddFormViewContentText = function(page) {
 
     result +=
 `</form>
-<div class="row">
+<div class="row mt-3">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
         <button id="add-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}" type="button" class="btn btn-success">Adicionar</button>
     </div>

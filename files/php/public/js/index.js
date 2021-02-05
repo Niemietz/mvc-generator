@@ -1,4 +1,4 @@
-export default function(loadingText, loadingTextClass, loadingClass, contentClass, loadingModalClass, contentModalClass) {
+exports.getText = function(loadingText, loadingTextClass, loadingClass, contentClass, loadingModalClass, contentModalClass) {
     let result =
 `const loadingTextClass = "${loadingTextClass}";
 const loadingClass = "${loadingClass}";
@@ -72,7 +72,7 @@ function showNotification(message, type = 4, useAlert = false)
         }
         else if(type == 3 || type == 5)
         {
-            Notiflix.Notify.Warn(message)
+            Notiflix.Notify.Warning(message)
         }
         else
         {
@@ -160,7 +160,7 @@ function showMessage(message, type = 4, useAlert = false)
         }
     
         Swal.fire({
-            "type": typeStr,
+            "icon": typeStr,
             title: titleStr,
             "text": text,
             showCloseButton: true,
@@ -302,7 +302,7 @@ function resetLoadingText()
     });
 }
 
-document.addEventListener(contentLoadedEventListener, (event) => {
+document.addEventListener(contentLoadedEventListener, function(event) {
     Notiflix.Notify.Init({
         failure: {
             textColor:"#000"
@@ -310,6 +310,10 @@ document.addEventListener(contentLoadedEventListener, (event) => {
         warning: {
             textColor:"#000"
         }
+    });
+    
+    document.querySelectorAll('.form-outline').forEach((formOutline) => {
+        new mdb.Input(formOutline).init();
     });
     
     setLoading(false);

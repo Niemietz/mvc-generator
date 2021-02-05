@@ -1,4 +1,4 @@
-exports.getListWithRemoveFooterText = function() {
+exports.getText = function() {
     let result =
 `<?php
 if(file_exists(DIRREQ . "app/view/footer.php"))

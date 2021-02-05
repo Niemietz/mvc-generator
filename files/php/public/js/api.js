@@ -1,4 +1,18 @@
-export default function(models) {
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
+
+String.prototype.capitaliseFirstLetter = function() {
+    try {
+        return this.toLowerCase().replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g, function(replace_latter) {
+            return replace_latter.toUpperCase();
+        }); //Can use also /\b[a-z]/g
+    } catch (ex) {
+        throw "Could not capitalize first letter of string \"" + this + "\"!\n\n" + ex;
+    }
+}
+
+exports.getText = function(models) {
     let result =
 `const apiLink = "/api";
 `
@@ -33,7 +47,7 @@ export function get${model.name.capitaliseFirstLetter()}s(beforeSend, onSuccess,
     };
 
     $.ajax({
-        url: apiLink + "/${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}s",
+        url: \`\${apiLink}/${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}s\`,
         dataType: "json",
         "beforeSend": function()
         {
@@ -102,7 +116,7 @@ export function get${model.name.capitaliseFirstLetter()}(${model.name.replaceAt(
     };
 
     $.ajax({
-        url: apiLink + "/${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}/" + ${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id,
+        url: \`\${apiLink}/${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}/\${${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id}\`,
         method: "GET",
         dataType: "json",
         "beforeSend": function()
@@ -173,7 +187,7 @@ export function add${model.name.capitaliseFirstLetter()}(data, beforeSend, onSuc
     };
 
     $.ajax({
-        url: apiLink + "/add_${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}",
+        url: \`\${apiLink}/add_${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}\`,
         dataType: "json",
         method: "POST",
         data: data,

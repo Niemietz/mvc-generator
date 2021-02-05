@@ -1,4 +1,14 @@
-export default function(pages) {
+String.prototype.capitaliseFirstLetter = function() {
+    try {
+        return this.toLowerCase().replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g, function(replace_latter) {
+            return replace_latter.toUpperCase();
+        }); //Can use also /\b[a-z]/g
+    } catch (ex) {
+        throw "Could not capitalize first letter of string \"" + this + "\"!\n\n" + ex;
+    }
+}
+
+exports.getText = function(pages) {
     let result =
 `<?php
 namespace Src\\Classes;

@@ -1,4 +1,4 @@
-exports.get404ViewFooterContent = function() {
+exports.getText = function() {
     return `<?php
     if(file_exists(DIRREQ . "app/view/footer.php"))
     {

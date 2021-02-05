@@ -1,6 +1,6 @@
-exports.getListWithAddEditHeadText = function(page) {
+exports.getText = function() {
     let result =
-`<script type="module" src="<?= DIRJS . '/view/${page.name.capitaliseFirstLetter()}.js' ?>"></script>`
+``
 
     return result
 }

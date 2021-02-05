@@ -1,16 +1,30 @@
-exports.getAddEditRemoveModal = function(page) {
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
+
+String.prototype.capitaliseFirstLetter = function() {
+    try {
+        return this.toLowerCase().replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g, function(replace_latter) {
+            return replace_latter.toUpperCase();
+        }); //Can use also /\b[a-z]/g
+    } catch (ex) {
+        throw "Could not capitalize first letter of string \"" + this + "\"!\n\n" + ex;
+    }
+}
+
+exports.getText = function(page) {
     let result =
-`<div id="mdl-add-edit-${page.item.name.replaceAt(0, item.page.item.name.charAt(0).toLowerCase())}" class="modal fade" tabindex="-1" aria-labelledby="add-edit-${page.item.name.replaceAt(0, item.page.item.name.charAt(0).toLowerCase())}-title" aria-hidden="true" >
+`<div id="mdl-add-edit-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}" class="modal fade" tabindex="-1" aria-labelledby="add-edit-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}-title" aria-hidden="true" >
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="add-edit-${page.item.name.replaceAt(0, item.page.item.name.charAt(0).toLowerCase())}-title">Adicionar ${page.item.name.capitaliseFirstLetter()}</h5>
+                <h5 class="modal-title" id="add-edit-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}-title">Adicionar ${page.item.name.capitaliseFirstLetter()}</h5>
                 <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
-                <form id="form-${page.item.name.replaceAt(0, item.page.item.name.charAt(0).toLowerCase())}">
+                <form id="form-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}">
 `
-                page.item.attributesAndColumns.forEach((item, index) => {
+                page.item.attributesAndColumnNames.forEach((item, index) => {
                     if (index == 0 || index % 3 == 0) {
                         result +=
 `                   <div class="row">
@@ -76,7 +90,7 @@ exports.getAddEditRemoveModal = function(page) {
                 <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">
                     Cancelar
                 </button>
-                <button id="add-edit-${page.item.name.replaceAt(0, item.page.item.name.charAt(0).toLowerCase())}" type="button" class="btn btn-primary">Adicionar</button>
+                <button id="add-edit-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}" ${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}Id="-1" type="button" class="btn btn-primary">Adicionar</button>
             </div>
         </div>
     </div>

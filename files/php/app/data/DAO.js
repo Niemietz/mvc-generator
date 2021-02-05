@@ -1,107 +1,109 @@
-export default function(database) {
+exports.getText = function(database) {
     let result = ""
 
     result =
 `<?php
 namespace App\\Data;
 
+error_reporting(E_ALL & ~E_WARNING);
+
 class DAO
 {
 	// LOCAL
-	private static $host = '${database.host}';
-	private static $user = '${database.user}';
-	private static $password = '${database.password}';
-	private static $db = '${database.database}';
+	private $host = '${database.host}';
+	private $user = '${database.user}';
+	private $password = '${database.password}';
+	private $db = '${database.database}';
 
-	private static $dbcon;
+	private $dbcon;
 
 	function __construct()
 	{
-		self::startConnection();
+		$this->startConnection();
 	}
 
-	private static function startConnection()
+	private function startConnection()
 	{
-		self::$dbcon = new \\mysqli(self::$host, self::$user, self::$password, self::$db);
+		$this->dbcon = new \\mysqli($this->host, $this->user, $this->password, $this->db);
 
-		self::checkConnection();
-		self::serverIsUp();
+		$this->checkConnection();
+		$this->serverIsUp();
 	}
 
-	private static function checkConnection()
+	private function checkConnection()
 	{
 		// CHECK CONNECTION
-		if (self::$dbcon->connect_error)
+		if ($this->dbcon->connect_error)
 		{
-		    $db_error = self::$dbcon->connect_error;
+		    $db_error = $this->dbcon->connect_error;
 
-		    throw new \\Exception("Connection failed: " . $db_error);
+		    throw new \\Exception("Connection failed: " . utf8_encode($db_error));
 		}
 	}
 
-	private static function serverIsUp()
+	private function serverIsUp()
 	{
 		// CHECK IF SERVER IS ALIVE
-		if (self::$dbcon->ping() == false)
+		if ($this->dbcon->ping() == false)
 		{
-		    $db_error = self::$dbcon->error;
+		    $db_error = $this->dbcon->error;
 
-			throw new \\Exception("Database server error: " . $db_error);
+			throw new \\Exception("Database server error: " . utf8_encode($db_error));
 		}
 	}
 
-	private static function getConnection()
+	private function getConnection()
 	{
-		if(is_null(self::$dbcon))
+		if(is_null($this->dbcon))
 		{
-			self::startConnection();
+			$this->startConnection();
 		}
 		else
 		{
-			self::serverIsUp();
+			$this->serverIsUp();
 		}
 
-		return self::$dbcon;
+		return $this->dbcon;
 	}
 
-	public static function closeConnection()
+	public function closeConnection()
 	{
-		if(is_null(self::$dbcon) == false)
+		if(is_null($this->dbcon) == false)
 		{
-			self::serverIsUp();
+			$this->serverIsUp();
 
-			self::$dbcon->close();
+			$this->dbcon->close();
 
-			self::$dbcon = null;
+			$this->dbcon = null;
 		}
 	}
 
-	public static function startTransaction()
+	public function startTransaction()
 	{
-		return self::executeQuery('START TRANSACTION');
+		return $this->executeQuery('START TRANSACTION');
 	}
 
-	public static function commitTransaction()
+	public function commitTransaction()
 	{
-		return self::executeQuery('COMMIT');
+		return $this->executeQuery('COMMIT');
 	}
 
-	public static function rollbackTransaction()
+	public function rollbackTransaction()
 	{
-		return self::executeQuery('ROLLBACK');
+		return $this->executeQuery('ROLLBACK');
 	}
 
-	public static function executeQuery($query)
+	public function executeQuery($query)
 	{
 		$result = null;
 
 		try
 		{
-			self::getConnection()->query("SET NAMES 'utf8'");
-			self::getConnection()->query("SET character_set_connection=utf8");
-			self::getConnection()->query("SET character_set_client=utf8");
-			self::getConnection()->query("SET character_set_results=utf8");
-			$result = self::getConnection()->query($query);
+			$this->getConnection()->query("SET NAMES 'utf8'");
+			$this->getConnection()->query("SET character_set_connection=utf8");
+			$this->getConnection()->query("SET character_set_client=utf8");
+			$this->getConnection()->query("SET character_set_results=utf8");
+			$result = $this->getConnection()->query($query);
 		}
 		catch(\\Exception $error)
 		{
@@ -111,41 +113,41 @@ class DAO
 		return $result;
 	}
 
-	public static function executeQueryAndGetId($query)
+	public function executeQueryAndGetId($query)
 	{
 		$result = 0;
 
-		self::getConnection()->query("SET NAMES 'utf8'");
-		self::getConnection()->query("SET character_set_connection=utf8");
-		self::getConnection()->query("SET character_set_client=utf8");
-		self::getConnection()->query("SET character_set_results=utf8");
-		$sql = self::getConnection()->query($query);
+		$this->getConnection()->query("SET NAMES 'utf8'");
+		$this->getConnection()->query("SET character_set_connection=utf8");
+		$this->getConnection()->query("SET character_set_client=utf8");
+		$this->getConnection()->query("SET character_set_results=utf8");
+		$sql = $this->getConnection()->query($query);
 
 		if ($sql == true)
 	    {
-	        $result = self::getConnection()->insert_id;
+	        $result = $this->getConnection()->insert_id;
 	    }
 	    else
 	    {
-	        $error = self::getConnection()->error;
-	        self::closeConnection();
+	        $error = $this->getConnection()->error;
+	        $this->closeConnection();
 	        throw new \\Exception($error . "\\n\\n" . $query);
 	    }
 
 	    return $result;
 	}
 
-	public static function executeQueryAndGetNumberOfAffectedRows($query)
+	public function executeQueryAndGetNumberOfAffectedRows($query)
 	{
 		$result = 0;
 
 		try
 		{
-			self::getConnection()->query("SET NAMES 'utf8'");
-			self::getConnection()->query("SET character_set_connection=utf8");
-			self::getConnection()->query("SET character_set_client=utf8");
-			self::getConnection()->query("SET character_set_results=utf8");
-			$result = self::getConnection()->query($query);
+			$this->getConnection()->query("SET NAMES 'utf8'");
+			$this->getConnection()->query("SET character_set_connection=utf8");
+			$this->getConnection()->query("SET character_set_client=utf8");
+			$this->getConnection()->query("SET character_set_results=utf8");
+			$result = $this->getConnection()->query($query);
 		}
 		catch(\\Exception $error)
 		{

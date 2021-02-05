@@ -1,5 +1,6 @@
-exports.get404ViewHeader = function() {
-    return `<?php
+exports.getText = function() {
+    return `<script type="module" src="<?= DIRJS . '/view/404.js' ?>"></script>
+    <?php
     if(file_exists(DIRREQ . "app/view/topbar.php"))
     {
         include(DIRREQ . "app/view/topbar.php");

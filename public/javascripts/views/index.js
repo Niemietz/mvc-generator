@@ -1,22 +1,5 @@
 import { getLanguage } from '/javascripts/views/language-chooser.js';
 import { setOnLanguageChooseFromIndex } from '/javascripts/views/language-chooser.js';
-
-// Models
-import getModelsText from '/javascripts/files/php/app/model/Models.js';
-import getModelText from '/javascripts/files/php/app/model/Model.js';
-
-// Data
-import getDAOText from '/javascripts/files/php/app/data/DAO.js';
-
-// Javascripts
-import getMainJSText from '/javascripts/files/php/public/js/view/main.js';
-import getAPIJSText from '/javascripts/files/php/public/js/api.js';
-import getIndexJSText from '/javascripts/files/php/public/js/index.js';
-
-// Classes
-import getRenderText from '/javascripts/files/php/src/classes/Render.js';
-import getRoutesText from '/javascripts/files/php/src/classes/Routes.js';
-
 import { setAfterDatabaseFormValidation, getDatabase, getDatabaseForm } from '/javascripts/tabs/database.js';
 import getFramework from '/javascripts/tabs/framework.js';
 import getLibsVersions from '/javascripts/tabs/libs.js';
@@ -25,6 +8,14 @@ import { getPages } from '/javascripts/tabs/page-adder.js';
 
 const inpDebugId = "debug";
 
+const myFilesDownloadClass = "my-files-download"
+const myFilesDeleteClass = "my-files-delete"
+const phpFilesContainerId = "php-files-container"
+const javaFilesContainerId = "java-files-container"
+const kotlinFilesContainerId = "kotlin-files-container"
+const phpFilesId = "php-files"
+const javaFilesId = "java-files"
+const kotlinFilesId = "kotlin-files"
 const btnNavLinkClass = "nav-link";
 const divNavLinkPagesId = "nav-pages";
 const divTabPagesId = "pages";
@@ -36,13 +27,16 @@ const divTabLibsId = "libs";
 const divContentClass = "content";
 const divLoadingClass = "loading";
 const txtLoadingClass = "loading-text";
-const divWebsiteGeneralId = "website-general-container";
+const divWebsiteGeneralComponentsId = "website-general-components-container";
 const frmWebsiteFormId = "website-form";
+const inpWebsiteTitleLabelId = "website-title-label";
 const inpWebsiteTitleId = "website-title";
+const inpWebsiteKeywordsContainerId = "website-keywords-container";
 const inpWebsiteKeywordsId = "website-keywords";
 const inp404KeywordsId = "404-keywords";
 const inpWebsiteTitleName = "website-title";
 const inpWebsiteAuthorName = "website-author";
+const inpWebsiteEmailName = "website-email";
 const inpWebsiteDescriptionName = "website-description";
 const inpWebsiteKeywordsName = "website-keywords";
 const inpLoadingTextName = "loading-text";
@@ -125,6 +119,7 @@ let afterGeneralFormValidation = null;
 const generatorData = {
     "title": "",
     "author": "",
+    "email": "",
     "description": "",
     "keywords404": [],
     "keywords": [],
@@ -147,24 +142,35 @@ function getGeneratorData() {
 
     generatorData.title = formData[inpWebsiteTitleName]
     generatorData.author = formData[inpWebsiteAuthorName]
-    generatorData.description = formData[inpWebsiteDescriptionName]
-    generatorData.keywords404 = formData[inp404KeywordsName].splitAndTrim()
-    generatorData.keywords = formData[inpWebsiteKeywordsName].splitAndTrim()
-
-    generatorData.loadingText = formData[inpLoadingTextName]
-    generatorData.loadingClass = formData[inpLoadingClassName]
-    generatorData.loadingTextClass = formData[inpLoadingTextClassName]
-    generatorData.loadingModalClass = formData[inpLoadingModalClassName]
-    generatorData.contentClass = formData[inpContentClassName]
-    generatorData.contentModalClass = formData[inpContentModalClassName]
-
+    generatorData.email = formData[inpWebsiteEmailName]
     generatorData.database = getDatabase()
     generatorData.language = getLanguage()
     generatorData.models = getModels()
     if (generatorData.language.value == 1) {
+        generatorData.description = formData[inpWebsiteDescriptionName]
+        generatorData.keywords404 = formData[inp404KeywordsName].splitAndTrim()
+        generatorData.keywords = formData[inpWebsiteKeywordsName].splitAndTrim()
+    
+        generatorData.loadingText = formData[inpLoadingTextName]
+        generatorData.loadingClass = formData[inpLoadingClassName]
+        generatorData.loadingTextClass = formData[inpLoadingTextClassName]
+        generatorData.loadingModalClass = formData[inpLoadingModalClassName]
+        generatorData.contentClass = formData[inpContentClassName]
+        generatorData.contentModalClass = formData[inpContentModalClassName]
+    
         generatorData.pages = getPages()
         generatorData.framework = getFramework()
     } else {
+        delete generatorData.keywords404
+        delete generatorData.keywords
+
+        delete generatorData.loadingText
+        delete generatorData.loadingClass
+        delete generatorData.loadingTextClass
+        delete generatorData.loadingModalClass
+        delete generatorData.contentClass
+        delete generatorData.contentModalClass
+
         delete generatorData.pages
         delete generatorData.framework
     }
@@ -175,6 +181,133 @@ function getGeneratorData() {
     }
 
     return generatorData
+}
+
+function loadPHPFiles(phpFiles) {
+    const phpFileSelect = document.getElementById(phpFilesId)
+    phpFileSelect.querySelectorAll("option").forEach((childNode) => { childNode.remove(); })
+    if (phpFiles.length == 0) {
+        const phpFileOption = document.createElement("option");
+        phpFileOption.value = "";
+        phpFileOption.innerHTML = "-"
+
+        phpFileSelect.append(phpFileOption)
+    }
+
+    phpFiles.forEach((phpFile, index) => {
+        const phpFileOption = document.createElement("option");
+        phpFileOption.value = phpFile;
+        phpFileOption.innerHTML = new Date(phpFile).toLocaleString()
+
+        if (index == 0) {
+            phpFileOption.selected = true
+        }
+
+        phpFileSelect.append(phpFileOption)
+    })
+}
+
+function loadJavaFiles(javaFiles) {
+    const javaFileSelect = document.getElementById(javaFilesId)
+    if (javaFiles.length == 0) {
+        const javaFileOption = document.createElement("option");
+        javaFileOption.value = "";
+        javaFileOption.innerHTML = "-"
+
+        javaFileSelect.append(javaFileOption)
+    }
+
+    javaFiles.forEach((javaFile, index) => {
+        const javaFileOption = document.createElement("option");
+        javaFileOption.value = javaFile;
+        javaFileOption.innerHTML = new Date(javaFile).toLocaleString()
+
+        if (index == 0) {
+            javaFileOption.selected = true
+        }
+
+        javaFileSelect.append(javaFileOption)
+    })
+}
+
+function loadKotlinFiles(kotlinFiles) {
+    const kotlinFileSelect = document.getElementById(kotlinFilesId)
+    if (kotlinFiles.length > 0) {
+        const kotlinFileOption = document.createElement("option");
+        kotlinFileOption.value = "";
+        kotlinFileOption.innerHTML = "-"
+
+        kotlinFileSelect.append(kotlinFileOption)
+    }
+
+    kotlinFiles.forEach((kotlinFile, index) => {
+        const kotlinFileOption = document.createElement("option");
+        kotlinFileOption.value = kotlinFile;
+        kotlinFileOption.innerHTML = new Date(kotlinFile).toLocaleString()
+
+        if (index == 0) {
+            kotlinFileOption.selected = true
+        }
+
+        kotlinFileSelect.append(kotlinFileOption)
+    })
+}
+
+function getMyFiles(language = -1) {
+    const phpURL = "\\show\\php"
+    const javaURL = "\\show\\java"
+    const kotlinURL = "\\show\\kotlin"
+
+    const runPHPJsonAjax = function() {
+        jsonAjax({
+            "url": phpURL,
+            "type": "GET",
+            success: function(response) {
+                loadPHPFiles(response.content.files)
+            },
+            error: function(er) {
+                console.error(er)
+            }
+        })
+    }
+    
+    const runJavaJsonAjax = function() {
+        jsonAjax({
+            "url": javaURL,
+            "type": "GET",
+            success: function(response) {
+                loadJavaFiles(response.content.files)
+            },
+            error: function(er) {
+                console.error(er)
+            }
+        })
+    }
+    
+    const runKotlinJsonAjax = function() {
+        jsonAjax({
+            "url": kotlinURL,
+            "type": "GET",
+            success: function(response) {
+                loadKotlinFiles(response.content.files)
+            },
+            error: function(er) {
+                console.error(er)
+            }
+        })
+    }
+
+    if (language == 1) {
+        runPHPJsonAjax()
+    } else if (language == 2) {
+        // runJavaJsonAjax()
+    } else if (language == 3) {
+        // runKotlinJsonAjax()
+    } else {
+        runPHPJsonAjax()
+        // runJavaJsonAjax()
+        // runKotlinJsonAjax()
+    }
 }
 
 function debugText(innerHTML) {
@@ -193,6 +326,99 @@ $(document).ready(function(e)
         }
     });
 
+    getMyFiles()
+    
+    document.getElementsByClassName(myFilesDeleteClass).forEach((myFilesDeleteButton) => {
+        myFilesDeleteButton.onclick = function(ev) {
+            const language = parseInt(this.getAttribute("language"))
+            let selected = null
+            let url = ""
+            if (language == 1) {
+                selected = document.getElementById(phpFilesId)
+                url = `\\delete\\php\\${selected.value}`
+            } else if (language == 2) {
+                selected = document.getElementById(javaFilesId)
+                url = `\\delete\\java\\${selected.value}`
+            } else if (language == 3) {
+                selected = document.getElementById(kotlinFilesId)
+                url = `\\delete\\kotlin\\${selected.value}`
+            }
+            if (selected.value != null && selected.value.length > 0) {
+                Notiflix.Confirm.Show(
+                    'Atenção',
+                    `Tem certeza que deseja remover o ZIP do dia ${selected.querySelector('option:checked').innerHTML}?`,
+                    'Sim',
+                    'Não',
+                    () => {
+                        if (url != null && url.length > 0) {
+                            jsonAjax({
+                                "url": url,
+                                "type": "DELETE",
+                                success: function(response) {
+                                    if (response.ok) {
+                                        getMyFiles(language)
+    
+                                        showMessage(`O ZIP ${selected.querySelector('option:checked').innerHTML} foi removido com sucesso!`, 1)
+                                    } else {
+                                        showMessage("Oops! Algo deu errado.", 3)
+                                        console.error(response.content)
+                                    }
+                                },
+                                error: function(er) {
+                                    showMessage("Oops! Algo deu errado.", 3)
+                                    console.error(er)
+                                }
+                            })
+                        }
+                    },
+                    null
+                );
+            } else {
+                showMessage("Nenhum ZIP selecionado", 2)
+            }
+        }
+    })
+    
+    document.getElementsByClassName(myFilesDownloadClass).forEach((myFilesDownloadButton) => {
+        myFilesDownloadButton.onclick = function(ev) {
+            const language = parseInt(this.getAttribute("language"))
+            let selected = null
+            let url = ""
+            if (language == 1) {
+                selected = document.getElementById(phpFilesId)
+                url = `\\download\\php\\${selected.value}`
+            } else if (language == 2) {
+                selected = document.getElementById(javaFilesId)
+                url = `\\download\\java\\${selected.value}`
+            } else if (language == 3) {
+                selected = document.getElementById(kotlinFilesId)
+                url = `\\download\\kotlin\\${selected.value}`
+            }
+            if (selected.value != null && selected.value.length > 0) {
+                if (url != null && url.length > 0) {
+                    jsonAjax({
+                        "url": url,
+                        "type": "GET",
+                        success: function(response) {
+                            if (response.ok) {
+                                downloadFileFromBase64(`${getLanguage().text} Base Files.zip`, response.content.zipBase64)
+                            } else {
+                                showMessage("Oops! Algo deu errado.", 3)
+                                console.error(response.content)
+                            }
+                        },
+                        error: function(er) {
+                            showMessage("Oops! Algo deu errado.", 3)
+                            console.error(er)
+                        }
+                    })
+                }
+            } else {
+                showMessage("Nenhum ZIP selecionado", 2)
+            }
+        }
+    })
+
     // Fetch the form we want to apply custom Bootstrap validation styles to
     const form = document.getElementById(frmWebsiteFormId);
 
@@ -209,7 +435,12 @@ $(document).ready(function(e)
 
     setOnLanguageChooseFromIndex(function(language) {
         if (language.value == 1) {
-            document.getElementById(divWebsiteGeneralId).classList.remove("d-none")
+            document.getElementById(inpWebsiteTitleLabelId).innerHTML = "Nome do site"
+            document.getElementById(phpFilesContainerId).classList.remove("d-none")
+            document.getElementById(javaFilesContainerId).classList.add("d-none")
+            document.getElementById(kotlinFilesContainerId).classList.add("d-none")
+            document.getElementById(inpWebsiteKeywordsContainerId).classList.remove("d-none")
+            document.getElementById(divWebsiteGeneralComponentsId).classList.remove("d-none")
             document.getElementById(div404KeywordsId).classList.remove("d-none")
             document.getElementById(divNavLinkPagesId).classList.remove("d-none")
             document.getElementById(divTabPagesId).classList.remove("d-none")
@@ -220,12 +451,20 @@ $(document).ready(function(e)
             document.getElementById(divNavLinkLibsId).classList.add("d-none")
             document.getElementById(divTabLibsId).classList.add("d-none")
         } else {
-            document.getElementById(divWebsiteGeneralId).classList.add("d-none")
+            document.getElementById(inpWebsiteTitleLabelId).innerHTML = "Nome"
+            document.getElementById(phpFilesContainerId).classList.add("d-none")
+            document.getElementById(javaFilesContainerId).classList.remove("d-none")
+            document.getElementById(kotlinFilesContainerId).classList.add("d-none")
+            document.getElementById(inpWebsiteKeywordsContainerId).classList.add("d-none")
+            document.getElementById(divWebsiteGeneralComponentsId).classList.add("d-none")
             document.getElementById(div404KeywordsId).classList.add("d-none")
             document.getElementById(divNavLinkPagesId).classList.add("d-none")
             document.getElementById(divTabPagesId).classList.add("d-none")
 
             if (language.value == 2) {
+                document.getElementById(phpFilesContainerId).classList.add("d-none")
+                document.getElementById(javaFilesContainerId).classList.add("d-none")
+                document.getElementById(kotlinFilesContainerId).classList.remove("d-none")
                 document.getElementById(divNavLinkFrameworksId).classList.add("d-none")
                 document.getElementById(divTabFrameworksId).classList.add("d-none")
 
@@ -274,25 +513,45 @@ $(document).ready(function(e)
     {
         afterGeneralFormValidation = function(event, validate) {
             if (validate) {
-
                 setAfterDatabaseFormValidation(function(event, validate) {
                     if (validate) {
                         const data = getGeneratorData()
                         console.log("Generating File...", data);
 
-                        jsonAjax({
-                            "url": "/zip/php",
-                            "type": "POST",
-                            "data": data,
-                            success: function(response) {
-                                console.log(response)
-                            },
-                            error: function(er) {
-                                console.error(er)
-                            }
-                        })
-                        
-                        debugText(getRenderText(data.pages))
+                        let url = ""
+                        if (data.language.value == 1) {
+                            url = "/zip/php"
+                        } else if (data.language.value == 2) {
+                            url = "/zip/java"
+                        } else if (data.language.value == 3) {
+                            url = "/zip/kotlin"
+                        }
+
+                        if (url != null && url.length > 0) {
+                            jsonAjax({
+                                "url": url,
+                                "type": "POST",
+                                "data": data,
+                                success: function(response) {
+                                    console.log(response)
+
+                                    if (response.ok) {
+                                        getMyFiles(data.language.value)
+    
+                                        debugText(response.content.zipBase64)
+
+                                        downloadFileFromBase64(`${data.language.text} Base Files.zip`, response.content.zipBase64)
+                                    } else {
+                                        showMessage(response.content, 2)
+                                    }                                    
+                                },
+                                error: function(er) {
+                                    console.error(er)
+                                }
+                            })
+                        } else {
+                            console.error("No language was set")
+                        }
                     }
                 })
 
@@ -300,6 +559,7 @@ $(document).ready(function(e)
                 databaseForm.submitLikeInputPress()
             }
         }
+    
         document.getElementById(aDatabaseId).click()
         setTimeout(function() {
             const form = document.getElementById(frmWebsiteFormId)

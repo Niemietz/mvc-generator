@@ -1,4 +1,18 @@
-export default function(model) {
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
+
+String.prototype.capitaliseFirstLetter = function() {
+    try {
+        return this.toLowerCase().replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g, function(replace_latter) {
+            return replace_latter.toUpperCase();
+        }); //Can use also /\b[a-z]/g
+    } catch (ex) {
+        throw "Could not capitalize first letter of string \"" + this + "\"!\n\n" + ex;
+    }
+}
+
+exports.getText = function(model) {
     let result = ""
 
     result =
@@ -7,7 +21,7 @@ namespace App\\Model;
 
 use App\\Model\\SuperClass\\eModel;
 
-use App\\Data\DAO;
+use App\\Data\\DAO;
 
 class ${model.name} extends eModel
 {
@@ -62,7 +76,8 @@ class ${model.name} extends eModel
         $query .= " FROM ${model.columnName} ${model.name.charAt(0).toLowerCase()}";
         $query .= " WHERE ${model.name.charAt(0).toLowerCase()}.id = " . $this->getId();
 
-        $sql = DAO::executeQuery($query);
+        $dao = new DAO();
+        $sql = $dao->executeQuery($query);
 
         if(mysqli_num_rows($sql) > 0)
         {
@@ -114,7 +129,8 @@ class ${model.name} extends eModel
 
         result += `
         
-        $sql = DAO::executeQuery($query);
+        $dao = new DAO();
+        $sql = $dao->executeQuery($query);
 
         if(mysqli_num_rows($sql) == 0)
         {
@@ -162,9 +178,9 @@ class ${model.name} extends eModel
         result += `
             $query .= ")";
 
-            $${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id = DAO::executeQueryAndGetId($query);
+            $${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id = $dao->executeQueryAndGetId($query);
 
-            if(${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id > 0)
+            if($${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id > 0)
             {
                 $this->setId($${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id);
                 $result = $${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id;
@@ -226,7 +242,8 @@ class ${model.name} extends eModel
             result += `
             $query .= " WHERE id = " . $this->getId();
 
-            if(DAO::executeQueryAndGetNumberOfAffectedRows($query) > 0)
+            $dao = new DAO();
+            if($dao->executeQueryAndGetNumberOfAffectedRows($query) > 0)
             {
                 $result = true;
             }
@@ -250,14 +267,15 @@ class ${model.name} extends eModel
 
             try
             {
-                if(DAO::executeQueryAndGetNumberOfAffectedRows($query))
+                $dao = new DAO();
+                if($dao->executeQueryAndGetNumberOfAffectedRows($query))
                 {
                     $result = true;
                 }
             }
             catch(\Exception $error)
             {
-                throw new \\Exception($error->getMessage());
+                throw $error;
             }
         }
         else

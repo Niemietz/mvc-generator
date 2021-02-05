@@ -1,6 +1,20 @@
-export default function(page) {
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
+
+String.prototype.capitaliseFirstLetter = function() {
+    try {
+        return this.toLowerCase().replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g, function(replace_latter) {
+            return replace_latter.toUpperCase();
+        }); //Can use also /\b[a-z]/g
+    } catch (ex) {
+        throw "Could not capitalize first letter of string \"" + this + "\"!\n\n" + ex;
+    }
+}
+
+exports.getText = function(page) {
     let result = 
-`import { add{page.item.name.capitaliseFirstLetter()}, edit${page.item.name.capitaliseFirstLetter()} } from './api.js';
+`import { add${page.item.name.capitaliseFirstLetter()}, edit${page.item.name.capitaliseFirstLetter()} } from './../api.js';
 
 const ${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}IdAttribute = "${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}Id";
 const frm${page.item.name.capitaliseFirstLetter()}Id = "form-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}";
@@ -25,7 +39,7 @@ function treatFormData(data) {
     result += `return data
 }
 
-document.addEventListener(contentLoadedEventListener, (event) => {
+document.addEventListener(contentLoadedEventListener, function(event) {
     document.getElementById(btnEditId).onclick = function(evt) {
         const ${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}Id = this.getAttribute(${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}IdAttribute);
 
@@ -62,7 +76,7 @@ document.addEventListener(contentLoadedEventListener, (event) => {
 
         data = treatFormData(data);
 
-        add{page.item.name.capitaliseFirstLetter()}(
+        add${page.item.name.capitaliseFirstLetter()}(
             data,
             function() {
                 setLoading(true);

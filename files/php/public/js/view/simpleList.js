@@ -1,6 +1,6 @@
-exports.getSimpleListJSText = function() {
+exports.getText = function() {
     let result =
-`import { getItems } from './api.js';
+`import { getItems } from './../api.js';
 
 const tblSimpleId = "table-simple"
 const divContainerSimpleId = "container-table";
@@ -47,7 +47,7 @@ function loadTable(items) {
     });
 }
 
-document.addEventListener(contentLoadedEventListener, (event) => {
+document.addEventListener(contentLoadedEventListener, function(event) {
     document.getElementById(divContainerSimpleId).classList.add("d-none");
     document.getElementById(divNoItemsId).classList.remove("d-none");
 

@@ -220,6 +220,32 @@ function createFileInstance(filename, content, mimetype = "text/plain")
     );
 }
 
+function base642Blob(b64Data, contentType='', sliceSize=512) {
+    const byteCharacters = atob(b64Data);
+    const byteArrays = [];
+  
+    for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      const slice = byteCharacters.slice(offset, offset + sliceSize);
+  
+      const byteNumbers = new Array(slice.length);
+      for (let i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+  
+      const byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+    }
+  
+    const blob = new Blob(byteArrays, {type: contentType});
+
+    return blob;
+}
+
+function downloadFileFromBase64(filename, base64) {
+    const blob = base642Blob(base64)
+    downloadFileFromBlob(filename, blob)
+}
+
 function downloadFileFromBlob(filename, blob, mimetype = "text/plain") {
 	let url = window.URL.createObjectURL(blob);
     
@@ -234,6 +260,13 @@ function downloadFileFromBlob(filename, blob, mimetype = "text/plain") {
 function downloadFile(filename, content, mimetype = "text/plain") {
 	let blob = new Blob([content], {mimetype});
 	downloadFileFromBlob(filename, blob, mimetype)
+}
+
+function downloadFileFromURL(filename, url) {
+	let link = document.createElement("a");
+    link.download = filename;
+    link.href = url;
+    link.click();
 }
 
 String.prototype.leftTrim = function() {

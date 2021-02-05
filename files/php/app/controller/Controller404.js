@@ -1,5 +1,5 @@
-export default function(keywords404) {
-`<?php
+exports.getText = function(keywords404) {
+    let result = `<?php
 
 namespace App\\Controller;
     
@@ -31,4 +31,6 @@ class Controller404 extends Render
     }
 }
 `
+
+    return result
 }

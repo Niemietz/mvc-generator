@@ -1,7 +1,7 @@
 const radFrameworksName = "frameworks"
 const chkUseCDNId = "use-cdn"
 
-const framework = { "id": 1, "framework": "Bootstrap", "useCDN": false }
+const framework = { "id": 2, "framework": "Bootstrap", "useCDN": false }
 
 $(document).ready(function()
 {

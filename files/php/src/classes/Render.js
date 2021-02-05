@@ -1,4 +1,18 @@
-export default function(pages) {
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
+
+String.prototype.capitaliseFirstLetter = function() {
+    try {
+        return this.toLowerCase().replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g, function(replace_latter) {
+            return replace_latter.toUpperCase();
+        }); //Can use also /\b[a-z]/g
+    } catch (ex) {
+        throw "Could not capitalize first letter of string \"" + this + "\"!\n\n" + ex;
+    }
+}
+
+exports.getText = function(pages) {
     let result =
 `<?php
 namespace Src\\Classes;
@@ -93,7 +107,7 @@ class Render implements iView
             include(DIRREQ . "app/view/topbar.php");
         }
     }
-    
+
     public function addHeader()
     {
         if(file_exists(DIRREQ . "app/view/{$this->getDirectory()}/header.php"))
@@ -151,9 +165,9 @@ class Render implements iView
             result += `
     private function add${page.item.name.capitaliseFirstLetter()}Modal()
     {
-        if(file_exists(DIRREQ . "app/view/add_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php"))
+        if(file_exists(DIRREQ . "app/view/${page.name}/modals/add_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php"))
         {
-            include(DIRREQ . "app/view/add_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php");
+            include(DIRREQ . "app/view/${page.name}/modals/add_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php");
         }
     `
             result += `}
@@ -163,9 +177,9 @@ class Render implements iView
             result += `
     private function edit${page.item.name.capitaliseFirstLetter()}Modal()
     {
-        if(file_exists(DIRREQ . "app/view/edit_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php"))
+        if(file_exists(DIRREQ . "app/view/${page.name}/modals/edit_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php"))
         {
-            include(DIRREQ . "app/view/edit_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php");
+            include(DIRREQ . "app/view/${page.name}/modals/edit_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php");
         }
     `
             result += `}
@@ -175,9 +189,9 @@ class Render implements iView
             result += `
     private function addEdit${page.item.name.capitaliseFirstLetter()}Modal()
     {
-        if(file_exists(DIRREQ . "app/view/addEdit_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php"))
+        if(file_exists(DIRREQ . "app/view/${page.name}/modals/addEdit_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php"))
         {
-            include(DIRREQ . "app/view/addEdit_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php");
+            include(DIRREQ . "app/view/${page.name}/modals/addEdit_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php");
         }
     `
             result += `}

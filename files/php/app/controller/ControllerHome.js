@@ -1,5 +1,5 @@
-export default function(title, description, keywords) {
-`<?php
+exports.getText = function(title, description, keywords) {
+    let result = `<?php
 
 namespace App\\Controller;
     
@@ -25,10 +25,12 @@ class ControllerHome extends Render
 
     result += `
         ));
-        $this->setDirectory("${title}");
+        $this->setDirectory("home");
 
         $this->renderLayout();
     }
 }
 `
+
+    return result
 }

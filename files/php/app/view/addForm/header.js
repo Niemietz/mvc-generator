@@ -1,5 +1,16 @@
-exports.getModelAddFormViewHeader = function(page) {
-    return `<?php
+String.prototype.capitaliseFirstLetter = function() {
+    try {
+        return this.toLowerCase().replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g, function(replace_latter) {
+            return replace_latter.toUpperCase();
+        }); //Can use also /\b[a-z]/g
+    } catch (ex) {
+        throw "Could not capitalize first letter of string \"" + this + "\"!\n\n" + ex;
+    }
+}
+
+exports.getText = function(page) {
+    return `<script type="module" src="<?= DIRJS . '/view/${page.name.capitaliseFirstLetter()}.js' ?>"></script>
+    <?php
     if(file_exists(DIRREQ . "app/view/topbar.php"))
     {
         include(DIRREQ . "app/view/topbar.php");

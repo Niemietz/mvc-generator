@@ -1,5 +1,5 @@
-export default function(page) {
-`<?php
+exports.getText = function(page) {
+    let result = `<?php
 
 namespace App\\Controller;
     
@@ -30,4 +30,6 @@ class Controller${page.name} extends Render
     }
 }
 `
+
+    return result
 }

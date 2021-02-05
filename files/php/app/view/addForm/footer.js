@@ -1,4 +1,4 @@
-exports.getModelAddFormViewFooterContent = function() {
+exports.getText = function() {
     return `<?php
     if(file_exists(DIRREQ . "app/view/footer.php"))
     {

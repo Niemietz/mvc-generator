@@ -1,4 +1,8 @@
-exports.getControllerAPIText = function(models) {
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
+
+exports.getText = function(models) {
     let result = 
 `<?php
 namespace App\\Controller;
@@ -85,6 +89,7 @@ class ControllerAPI extends eController
             if(model.insert) {
                 result += `public function add_${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}()
     {
+        $dao = null;
         try
         {
             $${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())} = new ${model.name}();
@@ -97,25 +102,32 @@ class ControllerAPI extends eController
             `
             })
             result += 
-            `DAO::startTransaction();
+            `$dao = new DAO();
+            $dao->startTransaction();
     
             $${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id =$${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}->insert();
 
             if($${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id > 0)
             {
-                DAO::commitTransaction();
+                $dao->commitTransaction();
 
                 $this->result["result"] = $${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id;
                 $this->result["error"] = null;
             }
             else
             {
-                DAO::rollbackTransaction();
+                if (!is_null($dao))
+            {
+                $dao->rollbackTransaction();
+            }
             }
         }
         catch(\\Exception $ex)
         {
-            DAO::rollbackTransaction();
+            if (!is_null($dao))
+            {
+                $dao->rollbackTransaction();
+            }
 
             $this->result["result"] = null;
             $this->result["error"] = $ex->getMessage();
@@ -130,6 +142,7 @@ class ControllerAPI extends eController
             if(model.update) {
                 result += `public function edit_${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}($${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id)
     {
+        $dao = null;
         try
         {
             $${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())} = new ${model.name}();
@@ -144,23 +157,30 @@ class ControllerAPI extends eController
             `
             })
             result += `
-            DAO::startTransaction();
+            $dao = new DAO();
+            $dao->startTransaction();
     
             if($${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}->update() == true)
             {
-                DAO::commitTransaction();
+                $dao->commitTransaction();
     
                 $this->result["result"] = true;
                 $this->result["error"] = null;
             }
             else
             {
-                DAO::rollbackTransaction();
+                if (!is_null($dao))
+            {
+                $dao->rollbackTransaction();
+            }
             }
         }
         catch(\\Exception $ex)
         {
-            DAO::rollbackTransaction();
+            if (!is_null($dao))
+            {
+                $dao->rollbackTransaction();
+            }
     
             $this->result["result"] = null;
             $this->result["error"] = $ex->getMessage();
@@ -175,23 +195,28 @@ class ControllerAPI extends eController
             if(model.delete) {
                 result += `public function delete_${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}($${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id)
     {
+        $dao = null;
         try
         {
             $${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())} = new ${model.name}();
             $${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}->read($${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id);
     
-            DAO::startTransaction();
+            $dao = new DAO();
+            $dao->startTransaction();
     
             if($${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}->delete() == true)
             {
-                DAO::commitTransaction();
+                $dao->commitTransaction();
     
                 $this->result["result"] = true;
                 $this->result["error"] = null;
             }
             else
             {
-                DAO::rollbackTransaction();
+                if (!is_null($dao))
+            {
+                $dao->rollbackTransaction();
+            }
 
                 $this->result["result"] = false;
                 $this->result["error"] = "Could not delete ${model.name}!";
@@ -199,7 +224,10 @@ class ControllerAPI extends eController
         }
         catch(\\Exception $ex)
         {
-            DAO::rollbackTransaction();
+            if (!is_null($dao))
+            {
+                $dao->rollbackTransaction();
+            }
     
             $this->result["result"] = null;
             $this->result["error"] = $ex->getMessage();

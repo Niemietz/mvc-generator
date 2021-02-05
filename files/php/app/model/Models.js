@@ -1,11 +1,25 @@
-export default function(model) {
+String.prototype.replaceAt = function(index, replacement) {
+    return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+}
+
+String.prototype.capitaliseFirstLetter = function() {
+    try {
+        return this.toLowerCase().replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g, function(replace_latter) {
+            return replace_latter.toUpperCase();
+        }); //Can use also /\b[a-z]/g
+    } catch (ex) {
+        throw "Could not capitalize first letter of string \"" + this + "\"!\n\n" + ex;
+    }
+}
+
+exports.getText = function(model) {
     let result = ""
 
     result =
 `<?php
 namespace App\\Model;
 
-use App\\Model\\SuperClass\eModelList;
+use App\\Model\\SuperClass\\eModelList;
 use App\\Model\\${model.name};
 use App\\Data\\DAO;
 
@@ -32,7 +46,8 @@ class ${model.name}s extends eModelList
 
         try
         {
-            $sql = DAO::executeQuery($query);
+            $dao = new DAO();
+            $sql = $dao->executeQuery($query);
 
             if(mysqli_num_rows($sql) > 0)
             {
@@ -54,7 +69,7 @@ class ${model.name}s extends eModelList
         }
         catch(\\Exception $error)
         {
-            throw new \\Exception($error->getMessage());
+            throw $error;
         }
 
         return $result;
