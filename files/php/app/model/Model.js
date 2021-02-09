@@ -12,6 +12,15 @@ String.prototype.capitaliseFirstLetter = function() {
     }
 }
 
+/**
+ * It replaces all occurrences in String
+ */
+String.prototype.replaceAll = function(search, replacement) {
+    let target = this;
+
+    return target.replace(new RegExp(search, 'g'), replacement);
+}
+
 exports.getText = function(model) {
     let result = ""
 
@@ -23,11 +32,11 @@ use App\\Model\\SuperClass\\eModel;
 
 use App\\Data\\DAO;
 
-class ${model.name} extends eModel
+class ${model.name.replaceAll("-", "_")} extends eModel
 {
     `
     model.attributesAndColumnNames.forEach((item) => {
-        result += `private $${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())};
+        result += `private $${item.attribute.replaceAll("-", "_").replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())};
     `
     })
     result += `
@@ -37,7 +46,7 @@ class ${model.name} extends eModel
     model.attributesAndColumnNames.forEach((item) => {
     result += 
 `
-        $this->${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())} = `
+        $this->${item.attribute.replaceAll("-", "_").replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())} = `
         if (item.type.id == 1) {
             result += `-1;`;
         } else if (item.type.id == 2) {
@@ -45,7 +54,7 @@ class ${model.name} extends eModel
         } else if (item.type.id == 3) {
             result += `false;`;
         } else if (item.type.id == 4) {
-            result += `-1f;`;
+            result += `-1;`;
         } else if (item.type.id == 5) {
             result += `-1.0;`;
         } else if (item.type.id == 6) {
@@ -70,11 +79,11 @@ class ${model.name} extends eModel
             } else {
                 result += `$query .= "`
             }
-            result += `${model.name.charAt(0).toLowerCase()}.${item.columnName}`
+            result += `${model.name.replaceAll("-", "_").charAt(0).toLowerCase()}.${item.columnName}`
         })
         result += `";
-        $query .= " FROM ${model.columnName} ${model.name.charAt(0).toLowerCase()}";
-        $query .= " WHERE ${model.name.charAt(0).toLowerCase()}.id = " . $this->getId();
+        $query .= " FROM ${model.columnName} ${model.name.replaceAll("-", "_").charAt(0).toLowerCase()}";
+        $query .= " WHERE ${model.name.replaceAll("-", "_").charAt(0).toLowerCase()}.id = " . $this->getId();
 
         $dao = new DAO();
         $sql = $dao->executeQuery($query);
@@ -87,10 +96,10 @@ class ${model.name} extends eModel
         model.attributesAndColumnNames.forEach((item, index) => {
             if (item.type.id == 3) {
                 result += `
-                $this->set${item.attribute.capitaliseFirstLetter()}(($row['${item.columnName}'] == "1") ? true : false);`
+                $this->set${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}(($row['${item.columnName}'] == "1") ? true : false);`
             } else {
                 result += `
-                $this->set${item.attribute.capitaliseFirstLetter()}($row['${item.columnName}']);`
+                $this->set${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}($row['${item.columnName}']);`
             }
         })
         result += `
@@ -110,8 +119,8 @@ class ${model.name} extends eModel
     {
         $result = 0;
 
-        $query = "SELECT ${model.name.charAt(0).toLowerCase()}.id";
-        $query .= " FROM ${model.columnName} ${model.name.charAt(0).toLowerCase()}";`
+        $query = "SELECT ${model.name.replaceAll("-", "_").charAt(0).toLowerCase()}.id";
+        $query .= " FROM ${model.columnName} ${model.name.replaceAll("-", "_").charAt(0).toLowerCase()}";`
         model.attributesAndColumnNames.forEach((item, index) => {
             if (index == 0) {
                 result += `
@@ -121,9 +130,9 @@ class ${model.name} extends eModel
         $query .= " AND `
             }
             if (item.type.id == 2 || item.type.id == 6) {
-                result += `UPPER(${model.name.charAt(0).toLowerCase()}.${item.columnName}) = UPPER('" . $this->get${item.attribute.capitaliseFirstLetter()}() . "')";`
+                result += `UPPER(${model.name.replaceAll("-", "_").charAt(0).toLowerCase()}.${item.columnName}) = UPPER('" . $this->get${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}() . "')";`
             } else {
-                result += `${model.name.charAt(0).toLowerCase()}.${item.columnName} = " . $this->get${item.attribute.capitaliseFirstLetter()}();`
+                result += `${model.name.replaceAll("-", "_").charAt(0).toLowerCase()}.${item.columnName} = " . $this->get${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}();`
             }
         })
 
@@ -153,37 +162,37 @@ class ${model.name} extends eModel
             // MIDDLE ITEMS IN ARRAY
             if (index > 0 && index < model.attributesAndColumnNames.length - 1) {
                 if (item.type.id == 2 || item.type.id == 6) {
-                    result += `"'" . $this->get${item.attribute.capitaliseFirstLetter()}() . "', ";
+                    result += `"'" . $this->get${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}() . "', ";
             $query .= `
                 } else {
-                    result += `$this->get${item.attribute.capitaliseFirstLetter()}() . ", ";
+                    result += `$this->get${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}() . ", ";
             $query .= `
                 }
-            } else if (index == 0 && model.attributesAndColumnNames.length > 0) {   // FIRST OF MANY ITEMS IN ARRAY
+            } else if (index == 0 && model.attributesAndColumnNames.length > 1) {   // FIRST OF MANY ITEMS IN ARRAY
                 if (item.type.id == 2 || item.type.id == 6) {
-                    result += `$query .= "'" . $this->get${item.attribute.capitaliseFirstLetter()}() . "', ";
+                    result += `$query .= "'" . $this->get${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}() . "', ";
             $query .= `
                 } else {
-                    result += `$query .= $this->get${item.attribute.capitaliseFirstLetter()}() . ", ";
+                    result += `$query .= $this->get${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}() . ", ";
             $query .= `
                 }
             } else { // LAST ITEM OF ARRAY
                 if (item.type.id == 2 || item.type.id == 6) {
-                    result += `"'" . $this->get${item.attribute.capitaliseFirstLetter()}() . "'";`
+                    result += `${(index == 0) ? "$query .= " : "" }"'" . $this->get${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}() . "'";`
                 } else {
-                    result += `$this->get${item.attribute.capitaliseFirstLetter()}();`
+                    result += `${(index == 0) ? "$query .= " : "" }$this->get${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}();`
                 }
             }
         })
         result += `
             $query .= ")";
 
-            $${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id = $dao->executeQueryAndGetId($query);
+            $${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}Id = $dao->executeQueryAndGetId($query);
 
-            if($${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id > 0)
+            if($${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}Id > 0)
             {
-                $this->setId($${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id);
-                $result = $${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id;
+                $this->setId($${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}Id);
+                $result = $${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}Id;
             }
         }
         else
@@ -215,27 +224,27 @@ class ${model.name} extends eModel
                 if (index > 0 && index < model.attributesAndColumnNames.length - 1) {
                     result += `${item.columnName} = `
                     if (item.type.id == 2 || item.type.id == 6) {
-                        result += `'" . $this->get${item.attribute.capitaliseFirstLetter()}() . "', ";
+                        result += `'" . $this->get${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}() . "', ";
             $query .= "`
                     } else {
-                        result += `" . $this->get${item.attribute.capitaliseFirstLetter()}() . ", ";
+                        result += `" . $this->get${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}() . ", ";
             $query .= "`
                     }
-                } else if (index == 0 && model.attributesAndColumnNames.length > 0) { // FIRST OF MANY ITEMS IN ARRAY
+                } else if (index == 0 && model.attributesAndColumnNames.length > 1) { // FIRST OF MANY ITEMS IN ARRAY
                     result += `$query .= "${item.columnName} = `
                     if (item.type.id == 2 || item.type.id == 6) {
-                        result += `'" . $this->get${item.attribute.capitaliseFirstLetter()}() . "', ";
+                        result += `'" . $this->get${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}() . "', ";
             $query .= "`
                     } else {
-                        result += `" . $this->get${item.attribute.capitaliseFirstLetter()}() . ", ";
+                        result += `" . $this->get${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}() . ", ";
             $query .= "`
                     }
                 } else { // LAST ITEM OF ARRAY
-                    result += `${item.columnName} = `
+                    result += `${((index == 0) ? "$query .= \"" : "") + item.columnName} = `
                     if (item.type.id == 2 || item.type.id == 6) {
-                        result += `'" . $this->get${item.attribute.capitaliseFirstLetter()}() . "'";`
+                        result += `'" . $this->get${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}() . "'";`
                     } else {
-                        result += `" . $this->get${item.attribute.capitaliseFirstLetter()}();`
+                        result += `" . $this->get${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}();`
                     }
                 }
             })
@@ -280,7 +289,7 @@ class ${model.name} extends eModel
         }
         else
         {
-            throw new \\Exception("Could not delete ${model.name} from database: Missing ID.");
+            throw new \\Exception("Could not delete ${model.name.replaceAll("-", "_")} from database: Missing ID.");
         }
 
         return $result;
@@ -290,14 +299,14 @@ class ${model.name} extends eModel
     
     model.attributesAndColumnNames.forEach((item, index) => {
         result += `
-    public function get${item.attribute.capitaliseFirstLetter()}()
+    public function get${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}()
     {
-        return $this->${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())};
+        return $this->${item.attribute.replaceAll("-", "_").replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())};
     }
 
-    public function set${item.attribute.capitaliseFirstLetter()}($${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())})
+    public function set${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}($${item.attribute.replaceAll("-", "_").replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())})
     {
-        $this->${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())} = $${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())};
+        $this->${item.attribute.replaceAll("-", "_").replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())} = $${item.attribute.replaceAll("-", "_").replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())};
     }
 `
     })
@@ -309,7 +318,7 @@ class ${model.name} extends eModel
             'id' => $this->getId()`
     model.attributesAndColumnNames.forEach((item, index) => {
         result += `,
-            '${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())}' => $this->get${item.attribute.capitaliseFirstLetter()}()`
+            '${item.attribute.replaceAll("-", "_").replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())}' => $this->get${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}()`
     })
     
     result += `

@@ -11,10 +11,10 @@ class Breadcrumb
 
     public function addBreadcrumb()
     {
-        $counter = count($this->parseUrl());
-        
         echo "<a href=" . DIRPAGE . ">Home</a>";
 
+        $counter = count($this->parseUrl());
+        
         $arrLink[0] = "";
         for($i = 0; $i < $counter; $i++)
         {
@@ -25,6 +25,11 @@ class Breadcrumb
                 echo " > <a href=" . DIRPAGE . $arrLink[0] . ">" . $this->parseUrl()[$i] . "</a>";
             }
         }
+    }
+    
+    public function add404Breadcrumb()
+    {
+        echo "<a href=" . DIRPAGE . ">Home</a>";
     }
 }`
 

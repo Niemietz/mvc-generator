@@ -8,6 +8,15 @@ String.prototype.capitaliseFirstLetter = function() {
     }
 }
 
+/**
+ * It replaces all occurrences in String
+ */
+String.prototype.replaceAll = function(search, replacement) {
+    let target = this;
+
+    return target.replace(new RegExp(search, 'g'), replacement);
+}
+
 exports.getText = function(pages) {
     let result =
 `<?php
@@ -33,7 +42,7 @@ class Routes
 `
 
     pages.forEach((page) => {
-        result += `"${page.route}" => "Controller${page.name.capitaliseFirstLetter()}",
+        result += `"${page.route}" => "Controller${page.name.capitaliseFirstLetter().replaceAll("-", "_")}",
 `        
     })
 

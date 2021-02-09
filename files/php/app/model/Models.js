@@ -12,6 +12,15 @@ String.prototype.capitaliseFirstLetter = function() {
     }
 }
 
+/**
+ * It replaces all occurrences in String
+ */
+String.prototype.replaceAll = function(search, replacement) {
+    let target = this;
+
+    return target.replace(new RegExp(search, 'g'), replacement);
+}
+
 exports.getText = function(model) {
     let result = ""
 
@@ -20,16 +29,16 @@ exports.getText = function(model) {
 namespace App\\Model;
 
 use App\\Model\\SuperClass\\eModelList;
-use App\\Model\\${model.name};
+use App\\Model\\${model.name.replaceAll("-", "_")};
 use App\\Data\\DAO;
 
-class ${model.name}s extends eModelList
+class ${model.name.replaceAll("-", "_")}s extends eModelList
 {
     public function read()
     {
         $result = false;
 
-        $query = "SELECT ${model.name.charAt(0).toLowerCase()}.id, ";`
+        $query = "SELECT ${model.name.replaceAll("-", "_").charAt(0).toLowerCase()}.id, ";`
     model.attributesAndColumnNames.forEach((item, index) => {
         if (index > 0) {
             result += `, ";
@@ -38,11 +47,11 @@ class ${model.name}s extends eModelList
             result += `
         $query .= "`
         }
-        result += `${model.name.charAt(0).toLowerCase()}.${item.columnName}`
+        result += `${model.name.replaceAll("-", "_").charAt(0).toLowerCase()}.${item.columnName}`
     })
 
     result += `";
-        $query .= " FROM ${model.columnName} ${model.name.charAt(0).toLowerCase()}";
+        $query .= " FROM ${model.columnName} ${model.name.replaceAll("-", "_").charAt(0).toLowerCase()}";
 
         try
         {
@@ -53,15 +62,15 @@ class ${model.name}s extends eModelList
             {
                 while($row = $sql->fetch_array())
                 {
-                    $${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())} = new ${model.name}();
-                    $${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}->setId($row['id']);`
+                    $${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())} = new ${model.name.replaceAll("-", "_")}();
+                    $${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}->setId($row['id']);`
     model.attributesAndColumnNames.forEach((item, index) => {
         result += `
-                    $${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}->set${item.attribute.capitaliseFirstLetter()}($row['${item.columnName}']);`
+                    $${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}->set${item.attribute.replaceAll("-", "_").capitaliseFirstLetter()}($row['${item.columnName}']);`
     })
     result += `
 
-                    $this->add($${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())});
+                    $this->add($${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())});
                 }
 
                 $result = true;

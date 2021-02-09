@@ -12,6 +12,15 @@ String.prototype.capitaliseFirstLetter = function() {
     }
 }
 
+/**
+ * It replaces all occurrences in String
+ */
+String.prototype.replaceAll = function(search, replacement) {
+    let target = this;
+
+    return target.replace(new RegExp(search, 'g'), replacement);
+}
+
 exports.getText = function(page) {
     let result =
 `<div id="mdl-add-edit-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}" class="modal fade" tabindex="-1" aria-labelledby="add-edit-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}-title" aria-hidden="true" >
@@ -35,8 +44,8 @@ exports.getText = function(page) {
                         result +=
 `                       <div class="col-12 col-sm-4 col-md-4 col-lg-4">
                             <div class="form-outline">
-                                <input name="${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())}" type="text" id="${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())}" class="form-control" />
-                                <label class="form-label" for="${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())}">${item.attribute.capitaliseFirstLetter()}</label>
+                                <input name="${item.attribute.replaceAll("-", "_").replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())}" type="text" id="${item.attribute.replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())}" class="form-control" />
+                                <label class="form-label" for="${item.attribute.replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())}">${item.attribute.capitaliseFirstLetter()}</label>
                             </div>
                         </div>
 `
@@ -44,8 +53,8 @@ exports.getText = function(page) {
                         result +=
 `                       <div class="col-12 col-sm-4 col-md-4 col-lg-4">
                             <div class="form-outline">
-                                <input name="${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())}" type="number" id="${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())}" class="form-control" />
-                                <label class="form-label" for="${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())}">${item.attribute.capitaliseFirstLetter()}</label>
+                                <input name="${item.attribute.replaceAll("-", "_").replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())}" type="number" id="${item.attribute.replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())}" class="form-control" />
+                                <label class="form-label" for="${item.attribute.replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())}">${item.attribute.capitaliseFirstLetter()}</label>
                             </div>
                         </div>
 `
@@ -53,8 +62,8 @@ exports.getText = function(page) {
                         result +=
 `                       <div class="col-12 col-sm-4 col-md-4 col-lg-4">
                             <div class="form-outline">
-                                <input name="${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())}" type="text" id="${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())}" class="form-control" />
-                                <label class="form-label" for="${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())}">${item.attribute.capitaliseFirstLetter()}</label>
+                                <input name="${item.attribute.replaceAll("-", "_").replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())}" type="text" id="${item.attribute.replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())}" class="form-control" />
+                                <label class="form-label" for="${item.attribute.replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())}">${item.attribute.capitaliseFirstLetter()}</label>
                             </div>
                         </div>
 `
@@ -65,11 +74,11 @@ exports.getText = function(page) {
                                 <input
                                     class="form-check-input"
                                     type="checkbox"
-                                    name="${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())}"
-                                    id="${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())}"
+                                    name="${item.attribute.replaceAll("-", "_").replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())}"
+                                    id="${item.attribute.replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())}"
                                     value="0"
                                 />
-                                <label class="form-check-label" for="${item.attribute.replaceAt(0, item.attribute.charAt(0).toLowerCase())}">
+                                <label class="form-check-label" for="${item.attribute.replaceAt(0, item.attribute.replaceAll("-", "_").charAt(0).toLowerCase())}">
                                     ${item.attribute.capitaliseFirstLetter()}
                                 </label>
                             </div>

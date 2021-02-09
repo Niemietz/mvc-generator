@@ -499,12 +499,10 @@ $(document).ready(function(e)
     };
 
     document.getElementById(inpWebsiteTitleId).onfocus = function(event) {
-        if(event.relatedTarget != null) {
-            if(event.relatedTarget.id == btnGenerateFilesId) {
-                const validate = this.checkValidity()
-                if (!validate) {
-                    showMessage("Verifique os campos não preenchidos!", 2)
-                }
+        if(event.relatedTarget != null && event.relatedTarget.id == btnGenerateFilesId) {
+            const validate = this.checkValidity()
+            if (!validate) {
+                showMessage("Verifique os campos não preenchidos!", 2)
             }
         }
     }

@@ -29,8 +29,7 @@ class Controller404 extends Render
 
         $this->renderLayout();
     }
-}
-`
+}`
 
     return result
 }

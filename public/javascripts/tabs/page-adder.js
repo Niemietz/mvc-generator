@@ -10,8 +10,10 @@ const divNoPageId = "no-page-warning";
 const rdPageTypeName = "page-type";
 
 const inpAddPageNameId = "name";
+const inpAddPageTitleId = "title";
 const inpAddPageRouteId = "route";
 const inpAddPageRouteName = "route";
+const inpAddPageTitleName = "title";
 const inpAddPageDescriptionName = "page-description";
 const inpAddPageKeywordsName = "keywords"
 const rdPageModelName = "page-model";
@@ -46,6 +48,8 @@ let afterPageFormValidation = null
 
 function fillAddPageModal(data) {
     document.getElementById(frmAddPageFormId)[inpAddPageNameId].value = data["name"]
+    
+    document.getElementById(frmAddPageFormId)[inpAddPageTitleName].value = data["title"]
     
     document.getElementById(frmAddPageFormId)[inpAddPageRouteName].value = data["route"]
     
@@ -104,7 +108,7 @@ $(document).ready(function()
     };
 
     document.getElementById(inpAddPageNameId).onfocus = function(event) {
-        if(event.relatedTarget.id == btnAddPageId) {
+        if(event.relatedTarget != null && event.relatedTarget.id == btnAddPageId) {
             const validate = this.checkValidity()
             if (!validate) {
                 showMessage("Verifique os campos não preenchidos!", 2)
@@ -113,7 +117,7 @@ $(document).ready(function()
     }
 
     document.getElementById(inpAddPageRouteId).onfocus = function(event) {
-        if(event.relatedTarget.id == btnAddPageId) {
+        if(event.relatedTarget != null && event.relatedTarget.id == btnAddPageId) {
             const validate = this.checkValidity()
             if (!validate) {
                 showMessage("Verifique os campos não preenchidos!", 2)
@@ -201,14 +205,18 @@ $(document).ready(function()
                 showMessage(`O nome "${newPageData[inpAddPageNameId]}" não pode conter espaços!`, 3)
                 validate = false;
             }
+            newPageData[inpAddPageNameId] = newPageData[inpAddPageNameId].removeAccents()
             if (newPageData[inpAddPageRouteName].hasSpace()) {
                 showMessage(`A rota "${newPageData[inpAddPageRouteName]}" não pode conter espaços!`, 3)
                 validate = false;
             }
+            newPageData[inpAddPageRouteName] = newPageData[inpAddPageRouteName].removeAccents()
 
             if (validate) {
                 if (currentEditPage != null) {
                     currentEditPage.name = newPageData[inpAddPageNameId]
+
+                    currentEditPage.title = newPageData[inpAddPageTitleId]
 
                     currentEditPage.route = newPageData[inpAddPageRouteName]
 
@@ -262,6 +270,8 @@ $(document).ready(function()
                     newPageCol1.innerHTML = newPageData[inpAddPageNameId];
 
                     newPage.name = newPageData[inpAddPageNameId]
+
+                    newPage.title = newPageData[inpAddPageTitleId]
 
                     const newPageCol2 = document.createElement("td");
                     newPageCol2.innerHTML = `/${newPageData[inpAddPageRouteName].toLowerCase()}`;
@@ -366,7 +376,7 @@ $(document).ready(function()
 });
 
 export function removePageFromModelId(modelId, modelName) {
-    const page = pages.find(page => page.item.id == modelId);
+    const page = pages.find(page => (page.item != null) ? page.item.id == modelId : false);
     if (page != null) {
         const pageToRemoveIndex = pages.indexOf(page)
         pages.splice(pageToRemoveIndex, 1)
@@ -387,7 +397,7 @@ export function removePageFromModelId(modelId, modelName) {
 export function changePageFromModelChange(modelId, modelName) {
     const pagesTableBody = document.getElementById(tblPagesBodyTableId)
 
-    const page = pages.find(page => page.item.id == modelId);
+    const page = pages.find(page => (page.item != null) ? page.item.id == modelId : false);
     if (page != null) {
         page.item.model = modelName
     

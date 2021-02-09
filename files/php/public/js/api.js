@@ -12,6 +12,15 @@ String.prototype.capitaliseFirstLetter = function() {
     }
 }
 
+/**
+ * It replaces all occurrences in String
+ */
+String.prototype.replaceAll = function(search, replacement) {
+    let target = this;
+
+    return target.replace(new RegExp(search, 'g'), replacement);
+}
+
 exports.getText = function(models) {
     let result =
 `const apiLink = "/api";
@@ -20,13 +29,13 @@ exports.getText = function(models) {
         if (model.hasList) {
             result += `
 /**
- * It gets ${model.name}s list
+ * It gets ${model.name.replaceAll("-", "_")}s list
  * 
  * @function beforeSend - beforeSend function
  * @function onSuccess - On success function
  * @function onError - On error function
  */
-export function get${model.name.capitaliseFirstLetter()}s(beforeSend, onSuccess, onError)
+export function get${model.name.replaceAll("-", "_").capitaliseFirstLetter()}s(beforeSend, onSuccess, onError)
 {
     const afterSuccess = function(response)
     {
@@ -47,7 +56,7 @@ export function get${model.name.capitaliseFirstLetter()}s(beforeSend, onSuccess,
     };
 
     $.ajax({
-        url: \`\${apiLink}/${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}s\`,
+        url: \`\${apiLink}/${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}s\`,
         dataType: "json",
         "beforeSend": function()
         {
@@ -88,14 +97,14 @@ export function get${model.name.capitaliseFirstLetter()}s(beforeSend, onSuccess,
         if (model.select) {
             result += `
 /**
- * It gets a(n) ${model.name}
+ * It gets a(n) ${model.name.replaceAll("-", "_")}
  * 
- * @param {Number} ${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id - ${model.name.capitaliseFirstLetter()} ID
+ * @param {Number} ${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}Id - ${model.name.replaceAll("-", "_").capitaliseFirstLetter()} ID
  * @function beforeSend - beforeSend function
  * @function onSuccess - On success function
  * @function onError - On error function
  */
-export function get${model.name.capitaliseFirstLetter()}(${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id, beforeSend, onSuccess, onError)
+export function get${model.name.replaceAll("-", "_").capitaliseFirstLetter()}(${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}Id, beforeSend, onSuccess, onError)
 {
     const afterSuccess = function(response)
     {
@@ -116,7 +125,7 @@ export function get${model.name.capitaliseFirstLetter()}(${model.name.replaceAt(
     };
 
     $.ajax({
-        url: \`\${apiLink}/${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}/\${${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id}\`,
+        url: \`\${apiLink}/${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}/\${${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}Id}\`,
         method: "GET",
         dataType: "json",
         "beforeSend": function()
@@ -158,14 +167,14 @@ export function get${model.name.capitaliseFirstLetter()}(${model.name.replaceAt(
         if (model.insert) {
             result += `
 /**
- * It adds a(n) ${model.name}
+ * It adds a(n) ${model.name.replaceAll("-", "_")}
  * 
- * @param {Object} data - ${model.name.capitaliseFirstLetter()} data
+ * @param {Object} data - ${model.name.replaceAll("-", "_").capitaliseFirstLetter()} data
  * @function beforeSend - beforeSend function
  * @function onSuccess - On success function
  * @function onError - On error function
  */
-export function add${model.name.capitaliseFirstLetter()}(data, beforeSend, onSuccess, onError)
+export function add${model.name.replaceAll("-", "_").capitaliseFirstLetter()}(data, beforeSend, onSuccess, onError)
 {
     const afterSuccess = function(response)
     {
@@ -187,7 +196,7 @@ export function add${model.name.capitaliseFirstLetter()}(data, beforeSend, onSuc
     };
 
     $.ajax({
-        url: \`\${apiLink}/add_${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}\`,
+        url: \`\${apiLink}/add_${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}\`,
         dataType: "json",
         method: "POST",
         data: data,
@@ -230,15 +239,15 @@ export function add${model.name.capitaliseFirstLetter()}(data, beforeSend, onSuc
         if (model.update) {
             result += `
 /**
- * It updates a(n) ${model.name}
+ * It updates a(n) ${model.name.replaceAll("-", "_")}
  * 
- * @param {Number} ${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id - ${model.name} ID
- * @param {Object} data - ${model.name.capitaliseFirstLetter()} data
+ * @param {Number} ${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}Id - ${model.name.replaceAll("-", "_")} ID
+ * @param {Object} data - ${model.name.replaceAll("-", "_").capitaliseFirstLetter()} data
  * @function beforeSend - beforeSend function
  * @function onSuccess - On success function
  * @function onError - On error function
  */
-export function edit${model.name.capitaliseFirstLetter()}(${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id, 
+export function edit${model.name.replaceAll("-", "_").capitaliseFirstLetter()}(${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}Id, 
 data, beforeSend, onSuccess, onError)
 {
     const afterSuccess = function(response)
@@ -261,7 +270,7 @@ data, beforeSend, onSuccess, onError)
     };
 
     $.ajax({
-        url: \`\${apiLink}/edit_${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}/\${${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id}\`,
+        url: \`\${apiLink}/edit_${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}/\${${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}Id}\`,
         method: "POST",
         dataType: "json",
         data: data,
@@ -304,14 +313,14 @@ data, beforeSend, onSuccess, onError)
         if (model.delete) {
             result += `    
 /**
- * It deletes a(n) ${model.name}
+ * It deletes a(n) ${model.name.replaceAll("-", "_")}
  * 
- * @param {Number} ${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id - ${model.name} ID
+ * @param {Number} ${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}Id - ${model.name.replaceAll("-", "_")} ID
  * @function beforeSend - beforeSend function
  * @function onSuccess - On success function
  * @function onError - On error function
  */
-export function delete${model.name.capitaliseFirstLetter()}(${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id, beforeSend, onSuccess, onError)
+export function delete${model.name.replaceAll("-", "_").capitaliseFirstLetter()}(${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}Id, beforeSend, onSuccess, onError)
 {
     const afterSuccess = function(response)
     {
@@ -333,7 +342,7 @@ export function delete${model.name.capitaliseFirstLetter()}(${model.name.replace
     };
 
     $.ajax({
-        url: \`\${apiLink}/delete_${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}/\${${model.name.replaceAt(0, model.name.charAt(0).toLowerCase())}Id}\`,
+        url: \`\${apiLink}/delete_${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}/\${${model.name.replaceAll("-", "_").replaceAt(0, model.name.replaceAll("-", "_").charAt(0).toLowerCase())}Id}\`,
         method: "GET",
         dataType: "json",
         "beforeSend": function()

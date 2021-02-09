@@ -16,6 +16,16 @@ exports.getText = function(page) {
     let result =
 `<div class="row">
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+    <?php
+        /*if (USEBREADCRUMB) {
+            $breadcrumb = new Src\\Classes\\Breadcrumb();
+            $breadcrumb->addBreadcrumb();
+        }*/
+    ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
         <button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#mdl-add-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}">
             Adicionar
         </button>

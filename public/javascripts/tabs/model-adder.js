@@ -261,7 +261,7 @@ $(document).ready(function()
     };
 
     document.getElementById(inpAddModelNameId).onfocus = function(event) {
-        if(event.relatedTarget.id == btnAddModelId) {
+        if(event.relatedTarget != null && event.relatedTarget.id == btnAddModelId) {
             const validate = this.checkValidity()
             if (!validate) {
                 showMessage("Verifique os campos não preenchidos!", 2)
@@ -270,7 +270,7 @@ $(document).ready(function()
     }
 
     document.getElementById(inpAddModelColumnNameId).onfocus = function(event) {
-        if(event.relatedTarget.id == btnAddModelId) {
+        if(event.relatedTarget != null && event.relatedTarget.id == btnAddModelId) {
             const validate = this.checkValidity()
             if (!validate) {
                 showMessage("Verifique os campos não preenchidos!", 2)
@@ -344,76 +344,80 @@ $(document).ready(function()
         afterFormValidation = function (event, validate) {
             const newModelData = $(`#${frmAddModelFormId}`).serializeFormJSON(false);
 
+            if (!Array.isArray(newModelData[inpAddModelAttribute])) {
+                newModelData[inpAddModelAttribute] = [
+                    newModelData[inpAddModelAttribute]
+                ]
+            }
+
+            if (!Array.isArray(newModelData[inpAddModelAttributeColumnName])) {
+                newModelData[inpAddModelAttributeColumnName] = [
+                    newModelData[inpAddModelAttributeColumnName]
+                ]
+            }
+
+            if (!Array.isArray(newModelData[selAttributeTypeName])) {
+                newModelData[selAttributeTypeName] = [
+                    newModelData[selAttributeTypeName]
+                ]
+            }
+
+            if (newModelData[inpAddModelSelect] == "1") {
+                newModelData[inpAddModelSelect] = true
+            } else {
+                newModelData[inpAddModelSelect] = false
+            }
+
+            if (newModelData[inpAddModelUpdate] == "1") {
+                newModelData[inpAddModelUpdate] = true
+            } else {
+                newModelData[inpAddModelUpdate] = false
+            }
+
+            if (newModelData[inpAddModelInsert] == "1") {
+                newModelData[inpAddModelInsert] = true
+            } else {
+                newModelData[inpAddModelInsert] = false
+            }
+
+            if (newModelData[inpAddModelDelete] == "1") {
+                newModelData[inpAddModelDelete] = true
+            } else {
+                newModelData[inpAddModelDelete] = false
+            }
+
+            if (newModelData[inpAddModelHasListName] == "1") {
+                newModelData[inpAddModelHasListName] = true
+            } else {
+                newModelData[inpAddModelHasListName] = false
+            }
+
             if (newModelData[inpAddModelName].hasSpace()) {
                 showMessage(`O nome "${newModelData[inpAddModelName]}" não pode conter espaços!`, 3)
                 validate = false;
             }
+            newModelData[inpAddModelName] = newModelData[inpAddModelName].removeAccents()
             if (newModelData[inpAddModelColumnName].hasSpace()) {
                 showMessage(`O nome da coluna "${newModelData[inpAddModelName]}" não pode conter espaços!`, 3)
                 validate = false;
             }
+            newModelData[inpAddModelColumnName] = newModelData[inpAddModelColumnName].removeAccents()
             for(let i = 0; i < newModelData[inpAddModelAttribute].length; i++) {
                 if (newModelData[inpAddModelAttribute][i].hasSpace()) {
                     showMessage(`O atributo "${newModelData[inpAddModelAttribute][i]}" não pode conter espaços!`, 3)
                     validate = false;
                     break;
                 }
+                newModelData[inpAddModelAttribute][i] = newModelData[inpAddModelAttribute][i].removeAccents()
                 if (newModelData[inpAddModelAttributeColumnName][i].hasSpace()) {
                     showMessage(`O nome da coluna "${newModelData[inpAddModelAttributeColumnName]}" não pode conter espaços!`, 3)
                     validate = false;
                     break;
                 }
+                newModelData[inpAddModelAttributeColumnName][i] = newModelData[inpAddModelAttributeColumnName][i].removeAccents()
             }
 
             if (validate) {
-                if (!Array.isArray(newModelData[inpAddModelAttribute])) {
-                    newModelData[inpAddModelAttribute] = [
-                        newModelData[inpAddModelAttribute]
-                    ]
-                }
-
-                if (!Array.isArray(newModelData[inpAddModelAttributeColumnName])) {
-                        newModelData[inpAddModelAttributeColumnName] = [
-                            newModelData[inpAddModelAttributeColumnName]
-                        ]
-                }
-
-                if (!Array.isArray(newModelData[selAttributeTypeName])) {
-                        newModelData[selAttributeTypeName] = [
-                            newModelData[selAttributeTypeName]
-                        ]
-                }
-
-                if (newModelData[inpAddModelSelect] == "1") {
-                    newModelData[inpAddModelSelect] = true
-                } else {
-                    newModelData[inpAddModelSelect] = false
-                }
-
-                if (newModelData[inpAddModelUpdate] == "1") {
-                    newModelData[inpAddModelUpdate] = true
-                } else {
-                    newModelData[inpAddModelUpdate] = false
-                }
-
-                if (newModelData[inpAddModelInsert] == "1") {
-                    newModelData[inpAddModelInsert] = true
-                } else {
-                    newModelData[inpAddModelInsert] = false
-                }
-
-                if (newModelData[inpAddModelDelete] == "1") {
-                    newModelData[inpAddModelDelete] = true
-                } else {
-                    newModelData[inpAddModelDelete] = false
-                }
-
-                if (newModelData[inpAddModelHasListName] == "1") {
-                    newModelData[inpAddModelHasListName] = true
-                } else {
-                    newModelData[inpAddModelHasListName] = false
-                }
-
                 if (currentEditModel != null) {
                     currentEditModel.name = newModelData[inpAddModelName]
 

@@ -8,9 +8,18 @@ String.prototype.capitaliseFirstLetter = function() {
     }
 }
 
+/**
+ * It replaces all occurrences in String
+ */
+String.prototype.replaceAll = function(search, replacement) {
+    let target = this;
+
+    return target.replace(new RegExp(search, 'g'), replacement);
+}
+
 exports.getText = function(page) {
     let result =
-`<script type="module" src="<?= DIRJS . '/view/${page.name.capitaliseFirstLetter()}.js' ?>"></script>
+`<script type="module" src="<?= DIRJS . '/view/${page.name.capitaliseFirstLetter().replaceAll("-", "_")}.js' ?>"></script>
 <?php
 if(file_exists(DIRREQ . "app/view/topbar.php"))
 {

@@ -15,6 +15,16 @@ String.prototype.capitaliseFirstLetter = function() {
 exports.getText = function(page) {
     let result =
 `<div class="row">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+    <?php
+        /*if (USEBREADCRUMB) {
+            $breadcrumb = new Src\\Classes\\Breadcrumb();
+            $breadcrumb->addBreadcrumb();
+        }*/
+    ?>
+    </div>
+</div>
+<div class="row">
     <div id="container-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}s" class="col-12 col-sm-12 col-md-12 col-lg-12 d-none">
         <table id="table-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}" class="table"></table>
     </div>

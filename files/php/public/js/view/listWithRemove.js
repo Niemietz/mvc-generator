@@ -12,13 +12,22 @@ String.prototype.capitaliseFirstLetter = function() {
     }
 }
 
+/**
+ * It replaces all occurrences in String
+ */
+String.prototype.replaceAll = function(search, replacement) {
+    let target = this;
+
+    return target.replace(new RegExp(search, 'g'), replacement);
+}
+
 exports.getText = function(page) {
     let result =
-`import { delete${page.item.name.capitaliseFirstLetter()}, get${page.item.name.capitaliseFirstLetter()}s } from './../api.js';
+`import { delete${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}, get${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}s } from './../api.js';
 
-const tbl${page.item.name.capitaliseFirstLetter()}Id = "table-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}"
-const divContainer${page.item.name.capitaliseFirstLetter()}sId = "container-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}s";
-const divNo${page.item.name.capitaliseFirstLetter()}sId = "no-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}s";
+const tbl${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}Id = "table-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}"
+const divContainer${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}sId = "container-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}s";
+const divNo${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}sId = "no-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}s";
 const btnRemoveClass = "remove-${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}";
 
 function getRemoveButtonHTML() {
@@ -32,25 +41,25 @@ function getRemoveButtonHTML() {
     return button
 }
 
-function get${page.item.name.capitaliseFirstLetter()}sAndLoad() {
-    get${page.item.name.capitaliseFirstLetter()}s(
+function get${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}sAndLoad() {
+    get${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}s(
         function() {
             setLoading(true);
-        }, function(${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}s) {
-            if (${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}s.length > 0) {
-                loadTable(${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}s);
+        }, function(${page.item.name.replaceAll("-", "_").replaceAt(0, page.item.name.replaceAll("-", "_").charAt(0).toLowerCase())}s) {
+            if (${page.item.name.replaceAll("-", "_").replaceAt(0, page.item.name.replaceAll("-", "_").charAt(0).toLowerCase())}s.length > 0) {
+                loadTable(${page.item.name.replaceAll("-", "_").replaceAt(0, page.item.name.replaceAll("-", "_").charAt(0).toLowerCase())}s);
 
-                document.getElementById(divContainer${page.item.name.capitaliseFirstLetter()}sId).classList.remove("d-none");
-                document.getElementById(divNo${page.item.name.capitaliseFirstLetter()}sId).classList.add("d-none");
+                document.getElementById(divContainer${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}sId).classList.remove("d-none");
+                document.getElementById(divNo${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}sId).classList.add("d-none");
             } else {
-                document.getElementById(divContainer${page.item.name.capitaliseFirstLetter()}sId).classList.add("d-none");
-                document.getElementById(divNo${page.item.name.capitaliseFirstLetter()}sId).classList.remove("d-none");
+                document.getElementById(divContainer${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}sId).classList.add("d-none");
+                document.getElementById(divNo${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}sId).classList.remove("d-none");
                 showMessage("Algo deu errado!", 2);
             }
             setLoading(false);
         }, function(error) {
-            document.getElementById(divContainer${page.item.name.capitaliseFirstLetter()}sId).classList.add("d-none");
-            document.getElementById(divNo${page.item.name.capitaliseFirstLetter()}sId).classList.remove("d-none");
+            document.getElementById(divContainer${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}sId).classList.add("d-none");
+            document.getElementById(divNo${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}sId).classList.remove("d-none");
             showMessage("Algo deu errado!", 2);
             //console.error(error);
             setLoading(false);
@@ -58,13 +67,13 @@ function get${page.item.name.capitaliseFirstLetter()}sAndLoad() {
     )
 }
 
-function loadTable(${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}s) {
-    ${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}s.forEach((${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}) => {
-        ${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}.push(getRemoveButtonHTML())
+function loadTable(${page.item.name.replaceAll("-", "_").replaceAt(0, page.item.name.replaceAll("-", "_").charAt(0).toLowerCase())}s) {
+    ${page.item.name.replaceAll("-", "_").replaceAt(0, page.item.name.replaceAll("-", "_").charAt(0).toLowerCase())}s.forEach((${page.item.name.replaceAll("-", "_").replaceAt(0, page.item.name.replaceAll("-", "_").charAt(0).toLowerCase())}) => {
+        ${page.item.name.replaceAll("-", "_").replaceAt(0, page.item.name.replaceAll("-", "_").charAt(0).toLowerCase())}.push(getRemoveButtonHTML())
     });
 
-    $(\`#\${tbl${page.item.name.capitaliseFirstLetter()}Id}\`).DataTable({
-        data: ${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}s, // TODO Deve estar assim: [ [ 1, "ModelA" ], [ 2, "ModelB" ] ]
+    $(\`#\${tbl${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}Id}\`).DataTable({
+        data: ${page.item.name.replaceAll("-", "_").replaceAt(0, page.item.name.replaceAll("-", "_").charAt(0).toLowerCase())}s, // TODO Deve estar assim: [ [ 1, "ModelA" ], [ 2, "ModelB" ] ]
         columns: [
             { title: "Id" },
             { title: "Nome" },
@@ -79,30 +88,30 @@ function loadTable(${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowe
 }
 
 document.addEventListener(contentLoadedEventListener, function(event) {
-    document.getElementById(divContainer${page.item.name.capitaliseFirstLetter()}sId).classList.add("d-none");
-    document.getElementById(divNo${page.item.name.capitaliseFirstLetter()}sId).classList.remove("d-none");
+    document.getElementById(divContainer${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}sId).classList.add("d-none");
+    document.getElementById(divNo${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}sId).classList.remove("d-none");
 
-    get${page.item.name.capitaliseFirstLetter()}sAndLoad();
+    get${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}sAndLoad();
 
     document.getElementsByClassName(btnRemoveClass).forEach((btnRemove) => {
         btnRemove.onclick = function(evt) {
-            const ${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}Id = -1; // TODO Review (Pegar da coluna da tabela)
+            const ${page.item.name.replaceAll("-", "_").replaceAt(0, page.item.name.replaceAll("-", "_").charAt(0).toLowerCase())}Id = -1; // TODO Review (Pegar da coluna da tabela)
 
             Notiflix.Confirm.Show(
                 'Atenção',
-                'Tem certeza que deseja remover a/o ${page.item.name.capitaliseFirstLetter()}?',
+                'Tem certeza que deseja remover a/o ${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}?',
                 'Sim',
                 'Não',
                 function() {
-                    delete${page.item.name.capitaliseFirstLetter()}(
-                        ${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}Id,
+                    delete${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}(
+                        ${page.item.name.replaceAll("-", "_").replaceAt(0, page.item.name.replaceAll("-", "_").charAt(0).toLowerCase())}Id,
                         function() {
                             setLoading(true);
                         },
                         function(result) {
                             if (result) {
-                                showMessage("O/A ${page.item.name.capitaliseFirstLetter()} foi removido!", 1);
-                                get${page.item.name.capitaliseFirstLetter()}sAndLoad()
+                                showMessage("O/A ${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()} foi removido!", 1);
+                                get${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}sAndLoad()
                             } else {
                                 showMessage("Algo deu errado!", 2);
                                 setLoading(false);

@@ -6,6 +6,15 @@ var fs = require('fs');
 
 var AdmZip = require('adm-zip');
 
+/**
+ * It replaces all occurrences in String
+ */
+String.prototype.replaceAll = function(search, replacement) {
+    let target = this;
+
+    return target.replace(new RegExp(search, 'g'), replacement);
+}
+
 String.prototype.capitaliseFirstLetter = function() {
     try {
         return this.toLowerCase().replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g, function(replace_latter) {
@@ -325,7 +334,7 @@ router.post('/zip/php', jsonParser, function(req, res, next) {
 						"content": simpleContent.getText(),
 						"footer": simpleFooter.getText(),
 						"head": simpleHead.getText(),
-						"header": simpleHeader.getText(),
+						"header": simpleHeader.getText(page),
 					})
 				} else if (page.type.id == 2) {
 					pages.push({
@@ -358,9 +367,9 @@ router.post('/zip/php', jsonParser, function(req, res, next) {
 						"modal": null,
 						"type": page.type.id,
 						"js": simpleListJS.getText(),
-						"content": simpleListContent.getText(page),
+						"content": simpleListContent.getText(),
 						"footer": simpleListFooter.getText(),
-						"head": simpleListHead.getText(page),
+						"head": simpleListHead.getText(),
 						"header": simpleListHeader.getText(page),
 					})
 				} else if (page.type.id == 5) {		
@@ -471,79 +480,79 @@ router.post('/zip/php', jsonParser, function(req, res, next) {
 			const zip = new AdmZip();
 			
 			// add file directly
-			zip.addFile(".htaccess", Buffer.alloc(htaccessText.length, htaccessText));
-			zip.addFile("Web.Config", Buffer.alloc(WebConfigText.length, WebConfigText));
+			zip.addFile(".htaccess", Buffer.from(htaccessText));
+			zip.addFile("Web.Config", Buffer.from(WebConfigText));
 
-			zip.addFile("app\\Dispatch.php", Buffer.alloc(DispatchText.length, DispatchText));
-			zip.addFile("app\\.htaccess", Buffer.alloc(appHtaccessText.length, appHtaccessText));
-			zip.addFile("app\\Web.Config", Buffer.alloc(appWebConfigText.length, appWebConfigText));
+			zip.addFile("app\\Dispatch.php", Buffer.from(DispatchText));
+			zip.addFile("app\\.htaccess", Buffer.from(appHtaccessText));
+			zip.addFile("app\\Web.Config", Buffer.from(appWebConfigText));
 			
-			zip.addFile("app\\controller\\Controller404.php", Buffer.alloc(Controller404Text.length, Controller404Text));
-			zip.addFile("app\\controller\\ControllerAPI.php", Buffer.alloc(ControllerAPIText.length, ControllerAPIText));
-			zip.addFile("app\\controller\\ControllerHome.php", Buffer.alloc(ControllerHomeText.length, ControllerHomeText));
-			zip.addFile("app\\controller\\eController.php", Buffer.alloc(eControllerText.length, eControllerText));
+			zip.addFile("app\\controller\\Controller404.php", Buffer.from(Controller404Text));
+			zip.addFile("app\\controller\\ControllerAPI.php", Buffer.from(ControllerAPIText));
+			zip.addFile("app\\controller\\ControllerHome.php", Buffer.from(ControllerHomeText));
+			zip.addFile("app\\controller\\eController.php", Buffer.from(eControllerText));
 			ControllerPagesTexts.forEach((ControllerPageText) => {
-				zip.addFile(`app\\controller\\Controller${ControllerPageText.name.capitaliseFirstLetter()}.php`, Buffer.alloc(ControllerPageText.text.length, ControllerPageText.text));
+				zip.addFile(`app\\controller\\Controller${ControllerPageText.name.replaceAll("-", "_").capitaliseFirstLetter()}.php`, Buffer.from(ControllerPageText.text));
 			})
 
-			zip.addFile("app\\data\\DAO.php", Buffer.alloc(DAOText.length, DAOText));
+			zip.addFile("app\\data\\DAO.php", Buffer.from(DAOText));
 
-			zip.addFile("app\\model\\_Interface\\iModel.php", Buffer.alloc(iModelText.length, iModelText));
-			zip.addFile("app\\model\\SuperClass\\eModel.php", Buffer.alloc(eModelText.length, eModelText));
-			zip.addFile("app\\model\\SuperClass\\eModelList.php", Buffer.alloc(eModelListText.length, eModelListText));
-			zip.addFile("app\\model\\SuperClass\\eSuper.php", Buffer.alloc(eSuperText.length, eSuperText));
-			zip.addFile("app\\model\\SuperClass\\JsonSerializable.php", Buffer.alloc(JsonSerializableText.length, JsonSerializableText));
+			zip.addFile("app\\model\\_Interface\\iModel.php", Buffer.from(iModelText));
+			zip.addFile("app\\model\\SuperClass\\eModel.php", Buffer.from(eModelText));
+			zip.addFile("app\\model\\SuperClass\\eModelList.php", Buffer.from(eModelListText));
+			zip.addFile("app\\model\\SuperClass\\eSuper.php", Buffer.from(eSuperText));
+			zip.addFile("app\\model\\SuperClass\\JsonSerializable.php", Buffer.from(JsonSerializableText));
 			
 			ModelTexts.forEach((model) => {
-				zip.addFile(`app\\model\\${model.name}.php`, Buffer.alloc(model.text.length, model.text));
+				zip.addFile(`app\\model\\${model.name.replaceAll("-", "_").capitaliseFirstLetter()}.php`, Buffer.from(model.text));
 			})
 			ModelsTexts.forEach((models) => {
-				zip.addFile(`app\\model\\${models.name}s.php`, Buffer.alloc(models.text.length, models.text));
+				zip.addFile(`app\\model\\${models.name.replaceAll("-", "_").capitaliseFirstLetter()}s.php`, Buffer.from(models.text));
 			})
 
-			zip.addFile("app\\view\\footer.php", Buffer.alloc(footerText.length, footerText));
-			zip.addFile("app\\view\\main.php", Buffer.alloc(mainText.length, mainText));
-			zip.addFile("app\\view\\topbar.php", Buffer.alloc(topbarText.length, topbarText));
+			zip.addFile("app\\view\\footer.php", Buffer.from(footerText));
+			zip.addFile("app\\view\\main.php", Buffer.from(mainText));
+			zip.addFile("app\\view\\topbar.php", Buffer.from(topbarText));
 
-			zip.addFile("public\\js\\api.js", Buffer.alloc(apiJSText.length, apiJSText));
-			zip.addFile("public\\js\\index.js", Buffer.alloc(indexJSText.length, indexJSText));
+			zip.addFile("public\\js\\api.js", Buffer.from(apiJSText));
+			zip.addFile("public\\js\\index.js", Buffer.from(indexJSText));
 			
-			zip.addFile("public\\js\\view\\404.js", Buffer.alloc(_404JSText.length, _404JSText));
-			zip.addFile("app\\view\\404\\content.php", Buffer.alloc(_404ContentText.length, _404ContentText));
-			zip.addFile("app\\view\\404\\footer.php", Buffer.alloc(_404FooterText.length, _404FooterText));
-			zip.addFile("app\\view\\404\\head.php", Buffer.alloc(_404HeadText.length, _404HeadText));
-			zip.addFile("app\\view\\404\\header.php", Buffer.alloc(_404HeaderText.length, _404HeaderText));
+			zip.addFile("public\\js\\view\\404.js", Buffer.from(_404JSText));
+			zip.addFile("app\\view\\404\\content.php", Buffer.from(_404ContentText));
+			zip.addFile("app\\view\\404\\footer.php", Buffer.from(_404FooterText));
+			zip.addFile("app\\view\\404\\head.php", Buffer.from(_404HeadText));
+			zip.addFile("app\\view\\404\\header.php", Buffer.from(_404HeaderText));
 
-			zip.addFile("public\\js\\view\\home.js", Buffer.alloc(homeJSText.length, homeJSText));
-			zip.addFile("app\\view\\home\\content.php", Buffer.alloc(homeContentText.length, homeContentText));
-			zip.addFile("app\\view\\home\\footer.php", Buffer.alloc(homeFooterText.length, homeFooterText));
-			zip.addFile("app\\view\\home\\head.php", Buffer.alloc(homeHeadText.length, homeHeadText));
-			zip.addFile("app\\view\\home\\header.php", Buffer.alloc(homeHeaderText.length, homeHeaderText));
+			zip.addFile("public\\js\\view\\home.js", Buffer.from(homeJSText));
+			zip.addFile("app\\view\\home\\content.php", Buffer.from(homeContentText));
+			zip.addFile("app\\view\\home\\footer.php", Buffer.from(homeFooterText));
+			zip.addFile("app\\view\\home\\head.php", Buffer.from(homeHeadText));
+			zip.addFile("app\\view\\home\\header.php", Buffer.from(homeHeaderText));
 			
 			pages.forEach((page) => {
-				zip.addFile(`public\\js\\view\\${page.name}.js`, Buffer.alloc(page.js.length, page.js));
-				zip.addFile(`app\\view\\${page.name}\\content.php`, Buffer.alloc(page.content.length, page.content));
-				zip.addFile(`app\\view\\${page.name}\\footer.php`, Buffer.alloc(page.footer.length, page.footer));
-				zip.addFile(`app\\view\\${page.name}\\head.php`, Buffer.alloc(page.head.length, page.head));
-				zip.addFile(`app\\view\\${page.name}\\header.php`, Buffer.alloc(page.header.length, page.header));
+				zip.addFile(`public\\js\\view\\${page.name.replaceAll("-", "_").capitaliseFirstLetter()}.js`, Buffer.from(page.js));
+				zip.addFile(`app\\view\\${page.name.capitaliseFirstLetter()}\\content.php`, Buffer.from(page.content));
+				zip.addFile(`app\\view\\${page.name.capitaliseFirstLetter()}\\footer.php`, Buffer.from(page.footer));
+				zip.addFile(`app\\view\\${page.name.capitaliseFirstLetter()}\\head.php`, Buffer.from(page.head));
+				zip.addFile(`app\\view\\${page.name.capitaliseFirstLetter()}\\header.php`, Buffer.from(page.header));
 				if (page.type == 5) {
-					zip.addFile(`app\\view\\${page.name}\\modals\\add_${page.model}_modal.php`, Buffer.alloc(page.modal.length, page.modal));
+					zip.addFile(`app\\view\\${page.name.capitaliseFirstLetter()}\\modals\\add_${page.model.replaceAll("-", "_")}_modal.php`, Buffer.from(page.modal));
 				} else if (page.type == 6) {
-					zip.addFile(`app\\view\\${page.name}\\modals\\edit_${page.model}_modal.php`, Buffer.alloc(page.modal.length, page.modal));
+					zip.addFile(`app\\view\\${page.name.capitaliseFirstLetter()}\\modals\\edit_${page.model.replaceAll("-", "_")}_modal.php`, Buffer.from(page.modal));
 				} else if (page.type == 8) {
-					zip.addFile(`app\\view\\${page.name}\\modals\\addEdit_${page.model}_modal.php`, Buffer.alloc(page.modal.length, page.modal));
+					zip.addFile(`app\\view\\${page.name.capitaliseFirstLetter()}\\modals\\addEdit_${page.model.replaceAll("-", "_")}_modal.php`, Buffer.from(page.modal));
 				} else if (page.type == 9) {
-					zip.addFile(`app\\view\\${page.name}\\modals\\edit_${page.model}_modal.php`, Buffer.alloc(page.modal.length, page.modal));
+					zip.addFile(`app\\view\\${page.name.capitaliseFirstLetter()}\\modals\\edit_${page.model.replaceAll("-", "_")}_modal.php`, Buffer.from(page.modal));
 				} else if (page.type == 10) {
-					zip.addFile(`app\\view\\${page.name}\\modals\\add_${page.model}_modal.php`, Buffer.alloc(page.modal.length, page.modal));
+					zip.addFile(`app\\view\\${page.name.capitaliseFirstLetter()}\\modals\\add_${page.model.replaceAll("-", "_")}_modal.php`, Buffer.from(page.modal));
 				} else if (page.type == 11) {
-					zip.addFile(`app\\view\\${page.name}\\modals\\addEdit_${page.model}_modal.php`, Buffer.alloc(page.modal.length, page.modal));
+					zip.addFile(`app\\view\\${page.name.capitaliseFirstLetter()}\\modals\\addEdit_${page.model.replaceAll("-", "_")}_modal.php`, Buffer.from(page.modal));
 				}
 			})
 
-			zip.addFile("config\\config.php", Buffer.alloc(configText.length, configText));
+			zip.addFile("config\\config.php", Buffer.from(configText));
 			
-			zip.addFile("public\\index.php", Buffer.alloc(indexText.length, indexText));
+			zip.addFile("public\\index.php", Buffer.from(indexText));
 
 			zip.addLocalFile(`${php.publicJSPath}\\bootstrap-multiselect.min.js`, "public\\js");
 			zip.addLocalFile(`${php.publicJSPath}\\notiflix-aio-2.7.0.min.js`, "public\\js");
@@ -553,16 +562,16 @@ router.post('/zip/php', jsonParser, function(req, res, next) {
 			zip.addLocalFile(`${php.publicCSSPath}\\notiflix-2.7.0.min.css`, "public\\css")
 			zip.addLocalFile(`${php.publicCSSPath}\\custom.css`, "public\\css")
 
-			zip.addFile("src\\composer.json", Buffer.alloc(composerText.length, composerText));
+			zip.addFile("src\\composer.json", Buffer.from(composerText));
 			
-			zip.addFile("src\\classes\\Breadcrumb.php", Buffer.alloc(BreadcrumbText.length, BreadcrumbText));
-			zip.addFile("src\\classes\\Render.php", Buffer.alloc(RenderText.length, RenderText));
-			zip.addFile("src\\classes\\Routes.php", Buffer.alloc(RoutesText.length, RoutesText));
+			zip.addFile("src\\classes\\Breadcrumb.php", Buffer.from(BreadcrumbText));
+			zip.addFile("src\\classes\\Render.php", Buffer.from(RenderText));
+			zip.addFile("src\\classes\\Routes.php", Buffer.from(RoutesText));
 			
-			zip.addFile("src\\interfaces\\iView.php", Buffer.alloc(iViewText.length, iViewText));
+			zip.addFile("src\\interfaces\\iView.php", Buffer.from(iViewText));
 			
-			zip.addFile("src\\traits\\UrlParser.php", Buffer.alloc(UrlParserText.length, UrlParserText));
-			zip.addFile("src\\traits\\UrlParserPHP5_3.php", Buffer.alloc(UrlParserPHP5_3Text.length, UrlParserPHP5_3Text));
+			zip.addFile("src\\traits\\UrlParser.php", Buffer.from(UrlParserText));
+			zip.addFile("src\\traits\\UrlParserPHP5_3.php", Buffer.from(UrlParserPHP5_3Text));
 	
 			// get everything as a buffer
 			const zipBuffer = zip.toBuffer();

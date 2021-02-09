@@ -5,6 +5,8 @@ exports.getText = function() {
 $internalFolder = "";
 
 define("USECACHE", false);
+define("USEBREADCRUMB", false);
+define("USE404BREADCRUMB", false);
 
 define("DIRPAGE", "http://{$_SERVER['HTTP_HOST']}/{$internalFolder}");
 

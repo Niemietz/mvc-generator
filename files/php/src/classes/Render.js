@@ -12,6 +12,15 @@ String.prototype.capitaliseFirstLetter = function() {
     }
 }
 
+/**
+ * It replaces all occurrences in String
+ */
+String.prototype.replaceAll = function(search, replacement) {
+    let target = this;
+
+    return target.replace(new RegExp(search, 'g'), replacement);
+}
+
 exports.getText = function(pages) {
     let result =
 `<?php
@@ -141,16 +150,16 @@ class Render implements iView
         pages.forEach((page) => {
             if (page.type.id == 5
             || page.type.id == 10) {
-                result += `$this->add${page.item.name.capitaliseFirstLetter()}Modal();
-`
+                result += `$this->add${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}Modal();
+        `
             } else if(page.type.id == 6
             || page.type.id == 9) {
-                result += `$this->edit${page.item.name.capitaliseFirstLetter()}Modal();
-`
+                result += `$this->edit${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}Modal();
+        `
             } else if(page.type.id == 8
             || page.type.id == 11) {
-                result += `$this->addEdit${page.item.name.capitaliseFirstLetter()}Modal();
-`
+                result += `$this->addEdit${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}Modal();
+        `
             }
         })
 
@@ -163,11 +172,11 @@ class Render implements iView
         if (page.type.id == 5
         || page.type.id == 10) {
             result += `
-    private function add${page.item.name.capitaliseFirstLetter()}Modal()
+    private function add${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}Modal()
     {
-        if(file_exists(DIRREQ . "app/view/${page.name}/modals/add_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php"))
+        if(file_exists(DIRREQ . "app/view/${page.name}/modals/add_${page.item.name.replaceAll("-", "_").replaceAt(0, page.item.name.replaceAll("-", "_").charAt(0).toLowerCase())}_modal.php"))
         {
-            include(DIRREQ . "app/view/${page.name}/modals/add_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php");
+            include(DIRREQ . "app/view/${page.name}/modals/add_${page.item.name.replaceAll("-", "_").replaceAt(0, page.item.name.replaceAll("-", "_").charAt(0).toLowerCase())}_modal.php");
         }
     `
             result += `}
@@ -175,11 +184,11 @@ class Render implements iView
         } else if(page.type.id == 6
         || page.type.id == 9) {
             result += `
-    private function edit${page.item.name.capitaliseFirstLetter()}Modal()
+    private function edit${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}Modal()
     {
-        if(file_exists(DIRREQ . "app/view/${page.name}/modals/edit_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php"))
+        if(file_exists(DIRREQ . "app/view/${page.name}/modals/edit_${page.item.name.replaceAll("-", "_").replaceAt(0, page.item.name.replaceAll("-", "_").charAt(0).toLowerCase())}_modal.php"))
         {
-            include(DIRREQ . "app/view/${page.name}/modals/edit_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php");
+            include(DIRREQ . "app/view/${page.name}/modals/edit_${page.item.name.replaceAll("-", "_").replaceAt(0, page.item.name.replaceAll("-", "_").charAt(0).toLowerCase())}_modal.php");
         }
     `
             result += `}
@@ -187,11 +196,11 @@ class Render implements iView
         } else if(page.type.id == 8
         || page.type.id == 11) {
             result += `
-    private function addEdit${page.item.name.capitaliseFirstLetter()}Modal()
+    private function addEdit${page.item.name.replaceAll("-", "_").capitaliseFirstLetter()}Modal()
     {
-        if(file_exists(DIRREQ . "app/view/${page.name}/modals/addEdit_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php"))
+        if(file_exists(DIRREQ . "app/view/${page.name}/modals/addEdit_${page.item.name.replaceAll("-", "_").replaceAt(0, page.item.name.replaceAll("-", "_").charAt(0).toLowerCase())}_modal.php"))
         {
-            include(DIRREQ . "app/view/${page.name}/modals/addEdit_${page.item.name.replaceAt(0, page.item.name.charAt(0).toLowerCase())}_modal.php");
+            include(DIRREQ . "app/view/${page.name}/modals/addEdit_${page.item.name.replaceAll("-", "_").replaceAt(0, page.item.name.replaceAll("-", "_").charAt(0).toLowerCase())}_modal.php");
         }
     `
             result += `}
