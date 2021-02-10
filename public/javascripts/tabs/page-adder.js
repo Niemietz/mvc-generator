@@ -128,6 +128,48 @@ $(document).ready(function()
     document.getElementsByName(rdPageTypeName).forEach((radio) => {
         radio.onclick = function(ev) {
             if (listWithItemIds.includes(this.id) || insertEditFormWithItemIds.includes(this.id)) {
+                document.getElementById(inpAddPageModelsTableId).querySelectorAll("div").forEach((childNode) => {
+                    childNode.remove()
+                })
+
+                const models = getModels()
+        
+                const setModelElement = function(index, model) {
+                    const newPageModelLabel = document.createElement("label");
+                    newPageModelLabel.classList.add("form-check-label")
+                    newPageModelLabel.setAttribute("for", model.id)
+                    newPageModelLabel.innerHTML = model.name
+
+                    const newPageModelCheckbox = document.createElement("input");
+                    newPageModelCheckbox.value = index + 1
+                    newPageModelCheckbox.id = model.id
+                    newPageModelCheckbox.name = rdPageModelName
+                    newPageModelCheckbox.type = "radio"
+                    newPageModelCheckbox.classList.add("form-check-input")
+                    newPageModelCheckbox.innerHTML = model.name;
+
+                    const newPageModel = document.createElement("div");
+                    newPageModel.classList.add("form-check")
+                    newPageModel.append(newPageModelCheckbox)
+                    newPageModel.append(newPageModelLabel)
+
+                    document.getElementById(inpAddPageModelsTableId).append(newPageModel)
+
+                    if (index == 0) {
+                        newPageModelCheckbox.click()
+                    }
+                }
+
+                if (listWithItemIds.includes(this.id)) {
+                    models.filter((model) => model.hasList).forEach ((model, index) => {
+                        setModelElement(index, model)
+                    })
+                } else {
+                    models.forEach ((model, index) => {
+                        setModelElement(index, model)
+                    })
+                }
+        
                 document.getElementById(inpAddPageModelsTableId).classList.remove("d-none")
             } else {
                 document.getElementById(inpAddPageModelsTableId).classList.add("d-none")
@@ -142,10 +184,6 @@ $(document).ready(function()
     })
 
     $(`#${mdlAddPageModalId}`).on('show.bs.modal', function (e) {
-        document.getElementById(inpAddPageModelsTableId).querySelectorAll("div").forEach((childNode) => {
-            childNode.remove()
-        })
-
         const models = getModels()
 
         document.getElementsByName(rdPageTypeName).forEach((radio) => {
@@ -159,32 +197,6 @@ $(document).ready(function()
                 radio.removeAttribute("disabled")
             } else if (insertEditFormWithItemIds.includes(radio.id)) {
                 radio.setAttribute("disabled", true)
-            }
-        })
-
-        models.forEach ((model, index) => {
-            const newPageModelLabel = document.createElement("label");
-            newPageModelLabel.classList.add("form-check-label")
-            newPageModelLabel.setAttribute("for", model.id)
-            newPageModelLabel.innerHTML = model.name
-
-            const newPageModelCheckbox = document.createElement("input");
-            newPageModelCheckbox.value = index + 1
-            newPageModelCheckbox.id = model.id
-            newPageModelCheckbox.name = rdPageModelName
-            newPageModelCheckbox.type = "radio"
-            newPageModelCheckbox.classList.add("form-check-input")
-            newPageModelCheckbox.innerHTML = model.name;
-
-            const newPageModel = document.createElement("div");
-            newPageModel.classList.add("form-check")
-            newPageModel.append(newPageModelCheckbox)
-            newPageModel.append(newPageModelLabel)
-
-            document.getElementById(inpAddPageModelsTableId).append(newPageModel)
-
-            if (index == 0) {
-                newPageModelCheckbox.click()
             }
         })
     })
